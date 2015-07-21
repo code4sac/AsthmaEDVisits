@@ -1,0 +1,374 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+}
+
+a,
+button {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/*------------------------------------------------------------------------------
+    :: Navigation
+------------------------------------------------------------------------------*/
+
+.navbar {
+    border-radius: 0;
+    margin-bottom: 0;
+}
+.nav > li > a {
+    font-size: 1.4em;
+}
+
+/*------------------------------------------------------------------------------
+    :: Sections
+------------------------------------------------------------------------------*/
+
+section {
+    padding-bottom: 7em;
+}
+
+.section_title {
+    margin-bottom: 4em;
+}
+.section_title span {
+    font-size: 1.8em;
+    line-height: 1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding-right: 0.5em;
+    background: white;
+    position: relative;
+}
+.section_title:before {
+    content: '';
+    border-top: 1px solid #1A1A1A;
+    position: relative;
+    top: 0.55em;
+    display: block;
+    width: 100%;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1em;
+    font-weight: 400;
+}
+h3 {
+    font-size: 1.6em;
+    line-height: 1.2em;
+    font-weight: 700;
+}
+
+
+p {
+    font-size: 1.6em;
+    line-height: 1.5em;
+}
+
+p.intro {
+    font-size: 2.4em;
+    line-height: 1.25em;
+}
+
+
+/*--------------- Main Title ---------------*/
+
+.main_title_nav {
+    background: #E6E6E6;
+    padding-top: 2em;
+}
+
+.main_title_nav h1 {
+
+}
+
+.main_title_wrap {
+    position: relative;
+}
+.indicator_dropdown {
+    position: absolute;
+    right: 0;
+    bottom: 6.5em;
+    width: 302px;
+}
+.indicator_dropdown span {
+    font-size: 1.6em;
+    font-weight: 700;
+    padding-right: 10px;
+}
+.indicator_dropdown form {
+    font-size: 1.2em;
+    margin: -5px 0 0 6.8em;
+}
+
+/*--------------- Subnav ---------------*/
+
+.subnav .nav {
+    border-top: 3px solid #000;
+    position: relative;
+}
+.subnav .nav > li > a {
+    font-size: 1.6em;
+    padding: 1em 1.2em;
+}
+.subnav .nav-pills>li.active>a,
+.subnav .nav-pills>li.active>a:focus,
+.subnav .nav-pills>li.active>a:hover {
+    border-radius: 0;
+}
+
+.subnav .download {
+    position: absolute;
+    bottom: 1.1em;
+    right: 0;
+}
+.subnav a,
+.subnav button {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+/*--------------- Affix Navigation ---------------*/
+
+.main_title_nav.affix {
+    top: 0;
+    z-index: 2000;
+    position: fixed;
+    font-size: 0.85em;
+    padding-top: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.main_title_nav.affix h1 {
+    margin: 0.5em 0;
+    font-size: 2.4em;
+}
+.main_title_nav.affix .subnav .download {
+    bottom: 0.7em;
+}
+.main_title_nav.affix select {
+    font-size: 1em;
+    padding: 0;
+    height: 2.6em;
+}
+.main_title_nav.affix .indicator_dropdown {
+    width: 32em;
+}
+
+body.affixed section:first-of-type {
+    margin-top: 10em;
+}
+
+/*------------------------------------------------------------------------------
+    :: Sections
+------------------------------------------------------------------------------*/
+
+section:first-of-type {
+    margin-top: 4em;
+}
+
+.named_anchor {
+    position: relative;
+    top: -10em;
+    width: 1em;
+    height: 1em;
+}
+
+/*--------------- Overview ---------------*/
+
+.number_box {
+    background: #E6E6E6;
+}
+
+.number_box ul {
+    padding: 1.5em 1.7em;
+    margin: 0;
+    list-style: none;
+}
+.number_box ul li {
+    margin-bottom: 1.2em;
+}
+.number_box .text {
+    font-size: 1.4em;
+    text-transform: uppercase;
+}
+.number_box .number {
+    font-weight: 700;
+    font-size: 4.2em;
+    line-height: 1em;
+}
+.number_box .number span {
+    font-size: 0.5em;
+}
+
+/*------------------------------------------------------------------------------
+    :: Map
+------------------------------------------------------------------------------*/
+
+path {
+    -webkit-transition: fill 200ms;
+    transition: fill 200ms;
+}
+
+.map_title {
+    background: #1A1A1A;
+    position: relative;
+}
+
+.map_title h2 {
+    font-size: 2.4em;
+    color: white;
+    font-weight: 400;
+    margin: 1em 0 0;
+    padding: 0.5em 0 0.6em 1em;
+}
+
+.map_title .social {
+    position: absolute;
+    top: 0.5em;
+    right: 1.1em;
+    font-size: 1.3em;
+}
+
+.map_title .social [class^="st-icon-"]:before {
+    color: #CCCCCC;
+}
+
+#map {
+    width:75%;
+    height: 600px;
+    float: left;
+    border-left: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+}
+.map-legend ul {
+    list-style: none;
+    padding: 0;
+}
+.map-legend .swatch {
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-right: 10px;
+}
+.leaflet-popup-close-button {
+    display: none;
+}
+.leaflet-popup-content-wrapper {
+    pointer-events: none;
+}
+
+/*--------------- Map Controls ---------------*/
+
+#map_form {
+    width: 25%;
+    margin-left: 75%;
+    border: 1px solid #999999;
+    border-top: 0;
+    height: 600px;
+    position: relative;
+}
+
+#map_form h3,
+#map_form form,
+#map_form #selected,
+#map_form p,
+#map_form .download {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#map_form h3 {
+    font-weight: 400;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    padding: 2em 0 0.71em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+#map_form form select,
+#map_form form input[type="text"] {
+    margin-bottom: 1em;
+}
+
+#map_form #selected_wrap p {
+    font-size: 1.3em;
+}
+#map_form .has_selected p {
+    display: none;
+}
+#map_form #selected a {
+    display: block;
+    float: left;
+}
+#map_form #selected .label {
+    font-size: 1.1em;
+    background: #999999;
+    font-weight: 300;
+    letter-spacing: 1px;
+    position: relative;
+    /*padding-right: 1.7em;*/
+    line-height: 2.2em;
+    margin: 0 0.2em 0 0;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+/*#map_form #selected .label:after {
+    content: "\e088";
+    content: "\e083";
+    font-family: 'Glyphicons Halflings';
+    color: #666666;
+    position: absolute;
+    top: -2px;
+    right: .2em;
+}*/
+
+#map_form #selected a:hover,
+#map_form #selected a:focus {
+    text-decoration: none;
+}
+#map_form #selected a:hover .label,
+#map_form #selected a:focus .label {
+    background: #7C7C7C;
+}
+/*#map_form #selected a:hover .label:after,
+#map_form #selected a:focus .label:after {
+    color: #5c5c5c;
+}*/
+#map_form .download {
+    position: absolute;
+    bottom: 1.75em;
+    display: block;
+}
+
+
+/*--------------- Histogram ---------------*/
+
+.histogram h3 {
+    font-weight: 400;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    padding: 2em 0 0.71em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+
+
+
