@@ -1,4 +1,4 @@
-var featureData = {
+var countyGeoJSON = {
     "type": "FeatureCollection",
     "features": [
         {

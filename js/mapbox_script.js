@@ -52,16 +52,9 @@ var MBox = {
         self.ages = ages;
         self.values = values;
 
-        // Get column name
-        self.data_column = column_names[values][ages];
-
-        // Get max for coloring and legend
-        self.data_max = minMax[self.data_column]['max'];
-        if( self.data_max % 10 == 0 ){
-            self.data_max += 10; // make 10 larger if already a 10
-        } else {
-            self.data_max = Math.ceil(self.data_max/10)*10; // round up to nearest 10
-        }
+        // Get column name and max value
+        self.data_property = column_names[values][ages];
+        self.data_max = minMax[self.data_property]['max'];
 
         // Fire it up!
         self.onReady();
@@ -69,7 +62,7 @@ var MBox = {
     onReady: function(){
         var self = this;
 
-        var data_column = self.data_column;
+        var data_property = self.data_property;
 
         L.mapbox.accessToken = 'pk.eyJ1IjoibXJzaG9yZXMiLCJhIjoiZDQwYjc2ZjJlOTM1YTlhMjI4N2JlNDg2ODI0NTlkMTcifQ.rlAJW20fwjEB8H9ptH1bNA';
 
@@ -79,22 +72,66 @@ var MBox = {
         // MapBox interaction disable
         map.scrollWheelZoom.disable();
 
-        var popup = new L.Popup({ autoPan: false });
 
-        // featureData of geoJSON comes from the 'ca-county.js' script in index.php
-        var countyLayer = L.geoJson(featureData,  {
-            style: getStyle,
-            onEachFeature: onEachFeature,
-            // filter: filterFeatures
-        }).addTo(map);
+        // Add jsonData values as properties of geoJSON objects
+        // countyGeoJSON of geoJSON comes from the 'ca-county.js' script in index.php
+        for (i = 0; i < countyGeoJSON.features.length; i++) {
+            var name = countyGeoJSON.features[i].properties.name;
+            for( var attrname in jsonData[name] ){
+                countyGeoJSON.features[i].properties[attrname] = jsonData[name][attrname];
+            }
+        }
 
+        // Create the stateLayer from updated countyGeoJSON
+        var stateLayer = L.mapbox.featureLayer(countyGeoJSON)
+                                 .addTo(map);
+
+        drawShapesByDataValue(data_property);
+        drawLegendByDataValue(data_property);
+
+        // Update if the age filter changes
+        jQuery('select[name="ages"]').on('change', function(event){
+            console.log('boom');
+            self.ages = jQuery(this).val();
+            updateMapAndLegend();
+        });
+
+        // Update if the age filter changes
+        jQuery('select[name="values"').on('change', function(event){
+            self.values = jQuery(this).val();
+            updateMapAndLegend();
+        });
+
+        function updateMapAndLegend(){
+            // Update data_property and max
+            self.data_property = column_names[self.values][self.ages];
+            self.data_max = minMax[self.data_property]['max'];
+            // Update the map and the legend
+            drawShapesByDataValue(self.data_property);
+            drawLegendByDataValue(self.data_property); 
+        }
+
+        function drawShapesByDataValue(data_property){
+            stateLayer.eachLayer(function(e){
+                style = getStyle(e.feature, data_property);
+                e.setStyle(style);
+            });
+        }
+
+        function drawLegendByDataValue(data_property){
+            map.legendControl.removeLegend(self.legend_html);
+
+            self.legend_html = getLegendHTML();
+            map.legendControl.addLegend(self.legend_html);
+            // console.log(map.legendControl);
+        }
 
         /* Set styles for each GeoJSON feature
         ----------------------------------------------------------------------*/
-        function getStyle(feature) {
-
-            var name = feature.properties.name;
-            var value = self.jsonData[name][data_column];
+        function getStyle(feature, data_property) {
+            var props = feature.properties,
+                name = props.name,
+                value = props[data_property];
 
             var style = defaultStyle;
             style.fillColor = getColor(value);
@@ -123,15 +160,17 @@ var MBox = {
 
         /* Set actions on each GeoJSON feature
         ----------------------------------------------------------------------*/
-        function onEachFeature(feature, layer) {
-            layer.on({
-                mousemove: mousemove,
-                mouseout: mouseout,
-                click: clickHandler
-            });
-            layer.is_selected = false;
-        }
+        // function onEachFeature(feature, layer) {
+        //     layer.on({
+        //         mousemove: mousemove,
+        //         mouseout: mouseout,
+        //         click: clickHandler
+        //     });
+        //     layer.is_selected = false;
+        // }
 
+
+        var popup = new L.Popup({ autoPan: false });
 
         var closeTooltip;
 
@@ -207,11 +246,11 @@ var MBox = {
             }, 100);
 
             if( !layer.is_selected ){
-                countyLayer.resetStyle(layer);
+                stateLayer.resetStyle(layer);
             }
         }
 
-        map.legendControl.addLegend(getLegendHTML());
+        // map.legendControl.addLegend(getLegendHTML());
 
 
         /* Fitler features

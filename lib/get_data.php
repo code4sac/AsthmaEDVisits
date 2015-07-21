@@ -130,27 +130,27 @@ function get_min_max_of_data($feature_data){
     $minMax = array(
         'number_0_17' => array(
             'min' => min($number_0_17),
-            'max' => max($number_0_17),
+            'max' => get_max_value($number_0_17),
         ),
         'number_18_plus' => array(
             'min' => min($number_18_plus),
-            'max' => max($number_18_plus),
+            'max' => get_max_value($number_18_plus),
         ),
         'number_all_ages' => array(
             'min' => min($number_all_ages),
-            'max' => max($number_all_ages),
+            'max' => get_max_value($number_all_ages),
         ),
         'rate_0_17' => array(
             'min' => min($rate_0_17),
-            'max' => max($rate_0_17),
+            'max' => get_max_value($rate_0_17),
         ),
         'rate_18_plus' => array(
             'min' => min($rate_18_plus),
-            'max' => max($rate_18_plus),
+            'max' => get_max_value($rate_18_plus),
         ),
         'rate_all_ages' => array(
             'min' => min($rate_all_ages),
-            'max' => max($rate_all_ages),
+            'max' => get_max_value($rate_all_ages),
         ),
     );
 
@@ -190,6 +190,16 @@ function get_api_feature_data($map){
 /*------------------------------------------------------------------------------
     :: Helpers
 ------------------------------------------------------------------------------*/
+
+function get_max_value($array){
+    $max = max($array);
+    if( $max % 10 == 0 ){
+        $max += 10; // make 10 larger if already a 10
+    } else {
+        $max = ceil($max/10)*10; // round up to nearest 10
+    }
+    return $max;
+}
 
 function slugify($text){
     $text = strtolower($text);
