@@ -127,32 +127,56 @@ function get_min_max_of_data($feature_data){
         }
     }
 
+    // Get max of each column
+    $number_0_17 = max($number_0_17);
+    $number_18_plus = max($number_18_plus);
+    $number_all_ages = max($number_all_ages);
+    $rate_0_17 = max($rate_0_17);
+    $rate_18_plus = max($rate_18_plus);
+    $rate_all_ages = max($rate_all_ages);
+
+    // Get max values of each group
+    $rate_max = max(array($rate_0_17, $rate_18_plus, $rate_all_ages));
+    $number_max = max(array($number_0_17, $number_18_plus, $number_all_ages));
+
+    // Max array
     $minMax = array(
-        'number_0_17' => array(
-            'min' => min($number_0_17),
-            'max' => get_max_value($number_0_17),
+        'rate' => array(
+            'min' => 0,
+            'max' => pad_max_value($rate_max)
         ),
-        'number_18_plus' => array(
-            'min' => min($number_18_plus),
-            'max' => get_max_value($number_18_plus),
-        ),
-        'number_all_ages' => array(
-            'min' => min($number_all_ages),
-            'max' => get_max_value($number_all_ages),
-        ),
-        'rate_0_17' => array(
-            'min' => min($rate_0_17),
-            'max' => get_max_value($rate_0_17),
-        ),
-        'rate_18_plus' => array(
-            'min' => min($rate_18_plus),
-            'max' => get_max_value($rate_18_plus),
-        ),
-        'rate_all_ages' => array(
-            'min' => min($rate_all_ages),
-            'max' => get_max_value($rate_all_ages),
-        ),
+        'number' => array(
+            'min' => 0,
+            'max' => pad_max_value($number_max),
+        )
     );
+
+    // $minMax = array(
+    //     'number_0_17' => array(
+    //         'min' => min($number_0_17),
+    //         'max' => pad_max_value($number_0_17),
+    //     ),
+    //     'number_18_plus' => array(
+    //         'min' => min($number_18_plus),
+    //         'max' => pad_max_value($number_18_plus),
+    //     ),
+    //     'number_all_ages' => array(
+    //         'min' => min($number_all_ages),
+    //         'max' => pad_max_value($number_all_ages),
+    //     ),
+    //     'rate_0_17' => array(
+    //         'min' => min($rate_0_17),
+    //         'max' => pad_max_value($rate_0_17),
+    //     ),
+    //     'rate_18_plus' => array(
+    //         'min' => min($rate_18_plus),
+    //         'max' => pad_max_value($rate_18_plus),
+    //     ),
+    //     'rate_all_ages' => array(
+    //         'min' => min($rate_all_ages),
+    //         'max' => pad_max_value($rate_all_ages),
+    //     ),
+    // );
 
     return json_encode($minMax);
 }
@@ -191,8 +215,7 @@ function get_api_feature_data($map){
     :: Helpers
 ------------------------------------------------------------------------------*/
 
-function get_max_value($array){
-    $max = max($array);
+function pad_max_value($max){
     if( $max % 10 == 0 ){
         $max += 10; // make 10 larger if already a 10
     } else {

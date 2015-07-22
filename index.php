@@ -1,30 +1,35 @@
 <?php
 require_once('lib/get_data.php');
 
-// Set default mapForm values
-$values = 'rate';
-$ages = '0';
-$map = 'county';
-$year = '2012';
+// // Set default mapForm values
+// $values = 'rate';
+// $ages = '0';
+// $map = 'county';
+// $year = '2012';
 
-if( isset($_GET['values']) ){
-    $values = $_GET['values'];
-}
-if( isset($_GET['ages']) ){
-    $ages = $_GET['ages'];
-}
-if( isset($_GET['map']) ){
-    $map = $_GET['map'];
-}
-if( isset($_GET['year']) ){
-    $year = $_GET['year'];
-}
+// if( isset($_GET['values']) ){
+//     $values = $_GET['values'];
+// }
+// if( isset($_GET['ages']) ){
+//     $ages = $_GET['ages'];
+// }
+// if( isset($_GET['map']) ){
+//     $map = $_GET['map'];
+// }
+// if( isset($_GET['year']) ){
+//     $year = $_GET['year'];
+// }
 
-// Get data from API and format for JSON
-$feature_data = get_api_feature_data($map);
-$jsonData = get_json_data_from_api($feature_data, $map);
+// Get `county` data from API and format for JSON
+$featureDataCounty = get_api_feature_data('county');
+$jsonDataCounty = get_json_data_from_api($featureDataCounty, 'county');
+$minMaxCounty = get_min_max_of_data($featureDataCounty);
 
-$minMax = get_min_max_of_data($feature_data);
+// Get `zip` data from API and format for JSON
+// $featureDataZip = get_api_feature_data('county');
+$featureDataZip = $featureDataCounty;
+$jsonDataZip = get_json_data_from_api($featureDataZip, 'county');
+$minMaxZip = get_min_max_of_data($featureDataZip);
 
 ?>
 
@@ -201,7 +206,7 @@ $minMax = get_min_max_of_data($feature_data);
                                 Zip Code Map
                             </option>
                         </select>
-                        <button class="btn btn-primary btn-block">Updated Map</button>
+                        <!-- <button class="btn btn-primary btn-block">Updated Map</button> -->
                     </form>
 
                     <div class="selected_wrap">
@@ -308,8 +313,10 @@ $minMax = get_min_max_of_data($feature_data);
 
 <script type="text/javascript">
 
-    var jsonData = <?php echo $jsonData; ?>;
-    var minMax = <?php echo $minMax; ?>;
+    var jsonDataCounty = <?php echo $jsonDataCounty; ?>;
+    var jsonDataZip = <?php echo $jsonDataCounty; ?>;
+    var minMaxCounty = <?php echo $minMaxCounty; ?>;
+    var minMaxZip = <?php echo $minMaxZip; ?>;
 
     jQuery(document).ready(function(){
         CHCF.dataMapInit();

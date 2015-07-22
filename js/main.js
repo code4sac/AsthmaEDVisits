@@ -23,7 +23,7 @@ var CHCF = {
         //     var request_type = $select_data_set.val();
         // });
 
-        MBox.init(jsonData, minMax, ages, values); // jsonData via index.php
+        MBox.init(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip); // jsonData via index.php
 
         $window.resize(function(){
             var win_width = jQuery(window).width();

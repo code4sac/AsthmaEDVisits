@@ -45,16 +45,26 @@ var selectedStyle = {
 ------------------------------------------------------------------------------*/
 
 var MBox = {
-    init: function(jsonData, minMax, ages, values){
+    init: function(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip){
         var self = this;
+
+        // Get settings from window hash if exist
+        var hash = self.getHash();
+        self.values = hash.values;
+        self.ages = hash.ages;
+        self.map = hash.map;
+        
         // Set data to use throughout
-        self.jsonData = jsonData;
-        self.ages = ages;
-        self.values = values;
+        self.jsonDataCounty = jsonDataCounty;
+        self.jsonDataZip = jsonDataZip;
+
+        // Set data to use throughout
+        self.minMaxCounty = minMaxCounty;
+        self.minMaxZip = minMaxZip;
 
         // Get column name and max value
-        self.data_property = column_names[values][ages];
-        self.data_max = minMax[self.data_property]['max'];
+        self.data_property = column_names[self.values][self.ages];
+        self.data_max = self.getMax();
 
         // Fire it up!
         self.onReady();
@@ -72,11 +82,12 @@ var MBox = {
         // MapBox interaction disable
         map.scrollWheelZoom.disable();
 
+        jsonData = self.getData();
 
         // Add jsonData values as properties of geoJSON objects
         // countyGeoJSON of geoJSON comes from the 'ca-county.js' script in index.php
         for (i = 0; i < countyGeoJSON.features.length; i++) {
-            var name = countyGeoJSON.features[i].properties.name;
+            var name = countyGeoJSON.features[i].properties.name
             for( var attrname in jsonData[name] ){
                 countyGeoJSON.features[i].properties[attrname] = jsonData[name][attrname];
             }
@@ -90,22 +101,30 @@ var MBox = {
         drawLegendByDataValue(data_property);
 
         // Update if the age filter changes
-        jQuery('select[name="ages"]').on('change', function(event){
-            console.log('boom');
+        jQuery('#mapForm select[name="ages"]').on('change', function(event){
             self.ages = jQuery(this).val();
+            self.updateHash();
             updateMapAndLegend();
         });
 
         // Update if the age filter changes
-        jQuery('select[name="values"').on('change', function(event){
+        jQuery('#mapForm select[name="values"').on('change', function(event){
             self.values = jQuery(this).val();
+            self.updateHash();
+            updateMapAndLegend();
+        });
+
+        // Update if the age filter changes
+        jQuery('#mapForm select[name="map"').on('change', function(event){
+            self.map = jQuery(this).val();
+            self.updateHash();
             updateMapAndLegend();
         });
 
         function updateMapAndLegend(){
             // Update data_property and max
             self.data_property = column_names[self.values][self.ages];
-            self.data_max = minMax[self.data_property]['max'];
+            self.data_max = self.getMax();
             // Update the map and the legend
             drawShapesByDataValue(self.data_property);
             drawLegendByDataValue(self.data_property); 
@@ -304,7 +323,13 @@ var MBox = {
                     from + (to ? '&ndash;' + to : '+')) + '</li>';
             }
 
-            return '<span>Rate per 10,000</span><ul>' + labels.join('') + '</ul>';
+            if( self.values == 'number' ){
+                var text = '<span>Number of ED Visits</span><ul>';
+            } else {
+                var text = '<span>Rate per 10,000</span><ul>';
+            }
+
+            return text + labels.join('') + '</ul>';
         }
 
 
@@ -314,4 +339,45 @@ var MBox = {
         map.attributionControl.addAttribution('Data from ' +
             '<a href="#">CHCF</a>');
     },
+    getHash: function(){
+        var raw = window.location.hash;
+        var hashValues = {
+            values: 'number',
+            ages: 'all',
+            map: 'county'
+        }
+
+        raw = raw.replace('#', '');
+        raw = raw.split('&');
+
+        for( var i = 0; i < raw.length; i++ ){
+            var split = raw[i].split('='); // values=number --> ['values', 'number']
+            hashValues[split[0]] = split[1]; // hasValues['values'] = 'number'
+        }
+        return hashValues;
+    },
+    updateHash: function(){
+        var self = this;
+        var new_hash = '#values=' + self.values + '&ages=' + self.ages + '&map=' + self.map;
+        // Update has without scrolling the window
+        var scrollmem = jQuery(window).scrollTop();
+        window.location.hash = new_hash;
+        jQuery(window).scrollTop(scrollmem);
+    },
+    getData: function(){
+        var self = this;
+        if( self.map == 'county' ){
+            return self.jsonDataCounty;
+        } else {
+            return self.jsonDataZip;
+        } 
+    },
+    getMax: function(){
+        var self = this;
+        if( self.map == 'county' ){
+            return self.minMaxCounty[self.values]['max'];
+        } else {
+            return self.minMaxZip[self.values]['max'];
+        }
+    }
 } // end var MBox
