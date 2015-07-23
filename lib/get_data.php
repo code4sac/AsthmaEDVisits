@@ -1,10 +1,54 @@
 <?php
+
+/*------------------------------------------------------------------------------
+    :: Make API call to Socrata portal to get source data
+------------------------------------------------------------------------------*/
+
 require_once('lib/socrata.php');
+
+function get_api_feature_data($map){
+    // $root_url = 'https://cdph.data.ca.gov';
+    // $view_uid = 'b35e-g7k2';
+    $root_url = 'https://opendata.socrata.com';
+    $app_token = '3hGsRhGZ89RPrTg0bByaNkrZy';
+
+    switch( $map ){
+        case 'county':
+            $view_uid = 'k9aw-e87g';
+            break;
+        case 'zip':
+            $view_uid = 'k9aw-e87g';
+            break;
+        default:
+            $view_uid = 'k9aw-e87g';
+            break;
+    }
+
+    if( $map == 'county' ){
+        $socrata = new Socrata($root_url, $app_token);
+        $params = array();
+
+        $feature_data = $socrata->get("/resource/$view_uid.json", $params);        
+    }
+
+    // TEMPORARY FOR LOCAL ZIP JSON -- DELETE AFTER API IS AVAILABLE
+    if( $map == 'zip' ){
+        $file  = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+        $file .= 'chcf-r1-1/data/2009_by_zipcode.json';
+        $feature_data = json_decode(file_get_contents($file), true);
+    }
+
+    return $feature_data;
+}
+
+/*------------------------------------------------------------------------------
+    :: Process Data
+------------------------------------------------------------------------------*/
 
 /* Return a JSON array suitable for use with MapBox
  *
 */
-function get_json_data_from_api($feature_data, $map){
+function get_json_from_feature_data($feature_data, $map){
 
     $data = array();
     $i = 0;
@@ -122,8 +166,6 @@ function get_min_max_of_data($feature_data){
             } catch (Exception $e) {
                 // pass
             }
-        } else {
-            echo $d['county'];
         }
     }
 
@@ -137,85 +179,43 @@ function get_min_max_of_data($feature_data){
 
     // Get max values of each group
     $rate_max = max(array($rate_0_17, $rate_18_plus, $rate_all_ages));
-    $number_max = max(array($number_0_17, $number_18_plus, $number_all_ages));
+    $number_max = max(array($number_0_17, $number_18_plus));
+    $number_all_max = $number_all_ages;
 
     // Max array
+    // Number/count array is extra level deep to accommodate a max between
+    // 0-17 and 18+, and a max of all ages since all ages is sum of 0-17 and 18+
     $minMax = array(
         'rate' => array(
             'min' => 0,
-            'max' => pad_max_value($rate_max)
+            'max' => pad_max_value($rate_max),
         ),
         'number' => array(
-            'min' => 0,
-            'max' => pad_max_value($number_max),
-        )
+            '0' => array(
+                'min' => 0,
+                'max' => pad_max_value($number_max),
+            ),
+            '18' => array(
+                'min' => 0,
+                'max' => pad_max_value($number_max),
+            ),
+            'all' => array(
+                'min' => 0,
+                'max' => pad_max_value($number_all_max),
+            ),
+        ),
     );
-
-    // $minMax = array(
-    //     'number_0_17' => array(
-    //         'min' => min($number_0_17),
-    //         'max' => pad_max_value($number_0_17),
-    //     ),
-    //     'number_18_plus' => array(
-    //         'min' => min($number_18_plus),
-    //         'max' => pad_max_value($number_18_plus),
-    //     ),
-    //     'number_all_ages' => array(
-    //         'min' => min($number_all_ages),
-    //         'max' => pad_max_value($number_all_ages),
-    //     ),
-    //     'rate_0_17' => array(
-    //         'min' => min($rate_0_17),
-    //         'max' => pad_max_value($rate_0_17),
-    //     ),
-    //     'rate_18_plus' => array(
-    //         'min' => min($rate_18_plus),
-    //         'max' => pad_max_value($rate_18_plus),
-    //     ),
-    //     'rate_all_ages' => array(
-    //         'min' => min($rate_all_ages),
-    //         'max' => pad_max_value($rate_all_ages),
-    //     ),
-    // );
 
     return json_encode($minMax);
 }
 
-/*------------------------------------------------------------------------------
-    :: Make API call to Socrata portal to get source data
-------------------------------------------------------------------------------*/
-
-function get_api_feature_data($map){
-    // $root_url = 'https://cdph.data.ca.gov';
-    // $view_uid = 'b35e-g7k2';
-    $root_url = 'https://opendata.socrata.com';
-    $app_token = '3hGsRhGZ89RPrTg0bByaNkrZy';
-
-    switch( $map ){
-        case 'county':
-            $view_uid = 'k9aw-e87g';
-            break;
-        case 'zip':
-            $view_uid = 'k9aw-e87g';
-            break;
-        default:
-            $view_uid = 'k9aw-e87g';
-            break;
-    }
-
-    $socrata = new Socrata($root_url, $app_token);
-    $params = array();
-
-    $feature_data = $socrata->get("/resource/$view_uid.json", $params);
-
-    return $feature_data;
-}
 
 /*------------------------------------------------------------------------------
     :: Helpers
 ------------------------------------------------------------------------------*/
 
 function pad_max_value($max){
+    $max = floor($max);
     if( $max % 10 == 0 ){
         $max += 10; // make 10 larger if already a 10
     } else {

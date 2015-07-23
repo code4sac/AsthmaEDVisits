@@ -40,6 +40,12 @@ var selectedStyle = {
     fillOpacity: 0.9
 }
 
+var emptyStyle = {
+    weight: 0,
+    opacity: 1,
+    color: 'white',
+    fillOpacity: 0
+}
 
 /* Vector shape styles
 ------------------------------------------------------------------------------*/
@@ -48,11 +54,21 @@ var MBox = {
     init: function(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip){
         var self = this;
 
+        // Set base tile map
+        self.base_tile_type = 'mapbox.light';
+
         // Get settings from window hash if exist
         var hash = self.getHash();
         self.values = hash.values;
         self.ages = hash.ages;
         self.map = hash.map;
+
+        var $mapForm = jQuery('#mapForm');
+        $mapForm.find('select[name="values"]').val(self.values)
+                .end()
+                .find('select[name="ages"]').val(self.ages)
+                .end()
+                .find('select[name="map"]').val(self.map);
         
         // Set data to use throughout
         self.jsonDataCounty = jsonDataCounty;
@@ -72,33 +88,46 @@ var MBox = {
     onReady: function(){
         var self = this;
 
-        var data_property = self.data_property;
-
         L.mapbox.accessToken = 'pk.eyJ1IjoibXJzaG9yZXMiLCJhIjoiZDQwYjc2ZjJlOTM1YTlhMjI4N2JlNDg2ODI0NTlkMTcifQ.rlAJW20fwjEB8H9ptH1bNA';
 
-        var map = L.mapbox.map('map', 'mapbox.streets')
-                          .setView([37.4, -118], 6);
+        var map = L.mapbox.map('map', self.base_tile_type, {
+                                doubleClickZoom: false, // Disable default double-click behavior
+                                scrollWheelZoom: false,
+                            })
+                            .setView([37.4, -118], 6)
+                            .on('dblclick', function(e) {
+                                // Zoom exactly to each double-clicked point
+                                map.setView(e.latlng, map.getZoom() + 1);
+                            });
 
-        // MapBox interaction disable
-        map.scrollWheelZoom.disable();
+        // MapBox interaction settings
+        // map.scrollWheelZoom.disable();
 
         jsonData = self.getData();
 
-        // Add jsonData values as properties of geoJSON objects
-        // countyGeoJSON of geoJSON comes from the 'ca-county.js' script in index.php
-        for (i = 0; i < countyGeoJSON.features.length; i++) {
-            var name = countyGeoJSON.features[i].properties.name
-            for( var attrname in jsonData[name] ){
-                countyGeoJSON.features[i].properties[attrname] = jsonData[name][attrname];
-            }
+
+        /* Add GeoJSON and TopoJSON to map
+        ----------------------------------------------------------------------*/
+
+        if( self.map == 'county' ){
+            var geographyLayer = L.mapbox.featureLayer(countyGeoJSON)
+                                         .addTo(map);
+            drawShapesByDataValue();
+            drawLegendByDataValue();
+            initFeatureInteractivity();
+        } else {
+            var geographyLayer = omnivore.topojson('/chcf-r1-1/js/ca-zip.json')
+                                         .addTo(map)
+                                         .on('ready', function() {
+                                            drawShapesByDataValue();
+                                            drawLegendByDataValue(); 
+                                            initFeatureInteractivity();
+                                         });            
         }
 
-        // Create the stateLayer from updated countyGeoJSON
-        var stateLayer = L.mapbox.featureLayer(countyGeoJSON)
-                                 .addTo(map);
 
-        drawShapesByDataValue(data_property);
-        drawLegendByDataValue(data_property);
+        /* Set styles for each GeoJSON feature
+        ----------------------------------------------------------------------*/
 
         // Update if the age filter changes
         jQuery('#mapForm select[name="ages"]').on('change', function(event){
@@ -126,18 +155,18 @@ var MBox = {
             self.data_property = column_names[self.values][self.ages];
             self.data_max = self.getMax();
             // Update the map and the legend
-            drawShapesByDataValue(self.data_property);
-            drawLegendByDataValue(self.data_property); 
+            drawShapesByDataValue();
+            drawLegendByDataValue(); 
         }
 
-        function drawShapesByDataValue(data_property){
-            stateLayer.eachLayer(function(e){
-                style = getStyle(e.feature, data_property);
+        function drawShapesByDataValue(){
+            geographyLayer.eachLayer(function(e){
+                style = getStyle(e.feature);
                 e.setStyle(style);
             });
         }
 
-        function drawLegendByDataValue(data_property){
+        function drawLegendByDataValue(){
             map.legendControl.removeLegend(self.legend_html);
 
             self.legend_html = getLegendHTML();
@@ -145,12 +174,24 @@ var MBox = {
             // console.log(map.legendControl);
         }
 
+        function initFeatureInteractivity(){
+            geographyLayer.eachLayer(function(e){
+                onEachFeature(e.feature, e); // e = layer
+            });
+        }
+
+
         /* Set styles for each GeoJSON feature
         ----------------------------------------------------------------------*/
-        function getStyle(feature, data_property) {
-            var props = feature.properties,
-                name = props.name,
-                value = props[data_property];
+        function getStyle(feature) {
+            var name = feature.properties.name;
+        
+            try {
+                var value = jsonData[name][self.data_property];
+            } catch(err) {
+                feature.properties.emptyStyle = true;
+                return emptyStyle;                
+            }
 
             var style = defaultStyle;
             style.fillColor = getColor(value);
@@ -179,81 +220,107 @@ var MBox = {
 
         /* Set actions on each GeoJSON feature
         ----------------------------------------------------------------------*/
-        // function onEachFeature(feature, layer) {
-        //     layer.on({
-        //         mousemove: mousemove,
-        //         mouseout: mouseout,
-        //         click: clickHandler
-        //     });
-        //     layer.is_selected = false;
-        // }
 
+        function onEachFeature(feature, layer) {
+            layer.on({
+                mousemove: mousemove,
+                mouseout: mouseout,
+                click: clickHandler,
+                dblclick: dblclickHandler,
+            });
+            layer.is_selected = false;
+        }
 
         var popup = new L.Popup({ autoPan: false });
 
         var closeTooltip;
 
         function clickHandler(e){
-            var layer = e.target,
-                title = layer.feature.properties.title;
-                slug = title.toLowerCase().replace(/\s+/g, '-');
+            var layer = e.target;
 
-            // Swap value of is_selected
-            layer.is_selected = !layer.is_selected;
+            // Ignore click on empty zip
+            if( !layer.feature.properties.emptyStyle ){
+                
+                var title = layer.feature.properties.title;
+                    slug = title.toLowerCase().replace(/\s+/g, '-');
 
-            // highlight feature
-            if( layer.is_selected ){
-                layer.setStyle(selectedStyle);
-            } else {
-                layer.setStyle(hoverStyle);
-            }
+                // Swap value of is_selected
+                layer.is_selected = !layer.is_selected;
 
-            $selected = jQuery('#selected');
-            if( layer.is_selected ){
-                // Add selected geography to sidebar
-                var html = '<a href="#" data-name="'+ slug +'"><span class="label label-default">'+ title + '</span></a>';
-
-                $selected.parent().addClass('has_selected');
-                $selected.append(html);
-            } else {
-                $selected.find('a[data-name="'+ slug +'"]').remove();
-
-                // Remove has_selected if no more <a>
-                if( $selected.find('a').length == 0 ){
-                    $selected.parent().removeClass('has_selected');
+                // highlight feature
+                if( layer.is_selected ){
+                    layer.setStyle(selectedStyle);
+                } else {
+                    layer.setStyle(hoverStyle);
                 }
 
-            }
+                if (!L.Browser.ie && !L.Browser.opera) {
+                    layer.bringToFront();
+                }
 
+                $selected = jQuery('#selected');
+                if( layer.is_selected ){
+                    // Add selected geography to sidebar
+                    var html = '<a href="#" data-name="'+ slug +'"><span class="label label-default">'+ title + '</span></a>';
+
+                    $selected.parent().addClass('has_selected');
+                    $selected.append(html);
+                } else {
+                    $selected.find('a[data-name="'+ slug +'"]').remove();
+
+                    // Remove has_selected if no more <a>
+                    if( $selected.find('a').length == 0 ){
+                        $selected.parent().removeClass('has_selected');
+                    }
+
+                }
+            }
         }
 
         function mousemove(e) {
-            var layer = e.target,
-                title = layer.feature.properties.title,
-                name = layer.feature.properties.name,
-                value = self.jsonData[name][data_column],
-                unit_text = 'rate per 10,000';
+            var layer = e.target;
+            var title = layer.feature.properties.title;
+            var name = layer.feature.properties.name;
 
-            if( self.feature_type == 'rate' ){
+            try {
+                var value = jsonData[name][self.data_property];
+            } catch(err) {
+                var value = null;
+            }
+
+            if( value == null ){
+                value = '<5';
+            }
+
+            if( self.values == 'rate' ){
                 unit_text = 'rate per 10,000';
             } else {
                 unit_text = 'total ED visits';
             }
 
-            popup.setLatLng(e.latlng);
-            popup.setContent('<div class="marker-title">' + title + ' County</div>' +
-                '<strong>' + value + '</strong> ' + unit_text);
-
-            if (!popup._map) popup.openOn(map);
-            window.clearTimeout(closeTooltip);
-
-            // highlight feature
-            if( !layer.is_selected ){
-                layer.setStyle(hoverStyle);
+            if( self.map == 'county' ){
+                var geo_type = 'County';
+            } else {
+                var geo_type = 'Zip Code';
             }
 
-            if (!L.Browser.ie && !L.Browser.opera) {
-                layer.bringToFront();
+            popup.setLatLng(e.latlng);
+            popup.setContent('<div class="marker-title">' + title + ' ' + geo_type + '</div>' +
+                '<strong>' + value + '</strong> ' + unit_text);
+
+            // If not an emplty zip, show popup and hover style
+            if( !layer.feature.properties.emptyStyle ){
+                if( !popup._map ){ popup.openOn(map);}
+                window.clearTimeout(closeTooltip);
+
+                // highlight feature
+                if( !layer.is_selected ){
+                    layer.setStyle(hoverStyle);
+                }
+
+                if (!L.Browser.ie && !L.Browser.opera) {
+                    layer.bringToFront();
+                }
             }
         }
 
@@ -265,12 +332,18 @@ var MBox = {
             }, 100);
 
             if( !layer.is_selected ){
-                stateLayer.resetStyle(layer);
+                var style = getStyle(layer.feature);
+                layer.setStyle(style);
             }
         }
 
-        // map.legendControl.addLegend(getLegendHTML());
-
+        function dblclickHandler(e){
+            var layer = e.target;
+            if( !layer.feature.properties.emptyStyle ){
+                // Zoom exactly to each double-clicked point
+                map.setView(e.latlng, map.getZoom() + 1);
+            }
+        }
 
         /* Fitler features
         ------------------------------------------------------------*/
@@ -342,8 +415,8 @@ var MBox = {
     getHash: function(){
         var raw = window.location.hash;
         var hashValues = {
-            values: 'number',
-            ages: 'all',
+            values: 'rate',
+            ages: '0',
             map: 'county'
         }
 
@@ -374,10 +447,19 @@ var MBox = {
     },
     getMax: function(){
         var self = this;
+        // Set min/max data by map type
         if( self.map == 'county' ){
-            return self.minMaxCounty[self.values]['max'];
+            var max_data = self.minMaxCounty;
         } else {
-            return self.minMaxZip[self.values]['max'];
+            var max_data = self.minMaxZip;
+        }
+        // Get min/max for values type
+        if( self.values == 'number' ){
+            // `number` has max/min for each group [all] and [0-17, 18+]
+            return max_data[self.values][self.ages]['max'];
+        } else {
+            // `rate` has max/min for 1 group [all, 0-17, 18+]
+            return max_data[self.values]['max'];
         }
     }
 } // end var MBox

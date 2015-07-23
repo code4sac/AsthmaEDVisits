@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-    :: Main
+    :: Main Init / Controller
 ------------------------------------------------------------------------------*/
 
 var CHCF = {
@@ -10,18 +10,11 @@ var CHCF = {
         // Subnav                
         AffixNav.init($window.width());
 
-        $mapForm = jQuery('#mapForm');
-        $select_ages = $mapForm.find('select[name="ages"]');
-        $select_values = $mapForm.find('select[name="values"]');
-        var ages = $select_ages.val();
-        var values = $select_values.val();
-
-        // $mapForm.submit(function(){
-        //     $select_age = $mapForm.find('select[name="age_range"]');
-        //     $select_data_set = $mapForm.find('select[name="data_set"]');
-        //     var request_age = $select_age.val();
-        //     var request_type = $select_data_set.val();
-        // });
+        // $mapForm = jQuery('#mapForm');
+        // $select_ages = $mapForm.find('select[name="ages"]');
+        // $select_values = $mapForm.find('select[name="values"]');
+        // var ages = $select_ages.val();
+        // var values = $select_values.val();
 
         MBox.init(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip); // jsonData via index.php
 
@@ -101,6 +94,8 @@ $(function() {
                 $('html,body').animate({
                     scrollTop: target.offset().top
                 }, 1000);
+                jQuery('.main_title_wrap .nav-pills li').removeClass('active');
+                jQuery(this).parent().addClass('active');
                 return false;
             }
         }

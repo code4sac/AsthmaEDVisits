@@ -1,34 +1,14 @@
 <?php
 require_once('lib/get_data.php');
 
-// // Set default mapForm values
-// $values = 'rate';
-// $ages = '0';
-// $map = 'county';
-// $year = '2012';
-
-// if( isset($_GET['values']) ){
-//     $values = $_GET['values'];
-// }
-// if( isset($_GET['ages']) ){
-//     $ages = $_GET['ages'];
-// }
-// if( isset($_GET['map']) ){
-//     $map = $_GET['map'];
-// }
-// if( isset($_GET['year']) ){
-//     $year = $_GET['year'];
-// }
-
 // Get `county` data from API and format for JSON
 $featureDataCounty = get_api_feature_data('county');
-$jsonDataCounty = get_json_data_from_api($featureDataCounty, 'county');
+$jsonDataCounty = get_json_from_feature_data($featureDataCounty, 'county');
 $minMaxCounty = get_min_max_of_data($featureDataCounty);
 
 // Get `zip` data from API and format for JSON
-// $featureDataZip = get_api_feature_data('county');
-$featureDataZip = $featureDataCounty;
-$jsonDataZip = get_json_data_from_api($featureDataZip, 'county');
+$featureDataZip = get_api_feature_data('zip');
+$jsonDataZip = get_json_from_feature_data($featureDataZip, 'zip');
 $minMaxZip = get_min_max_of_data($featureDataZip);
 
 ?>
@@ -180,29 +160,29 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
                     <h3>Options</h3>
                     <form id="mapForm" method="GET">
                         <select class="form-control" name="values">
-                            <option value="rate" <?php if($values == 'rate'){ echo 'selected';} ?>>
+                            <option value="rate">
                                 Rate Per 10,000
                             </option>
-                            <option value="number" <?php if($values == 'number'){ echo 'selected';} ?>>
+                            <option value="number">
                                 Number of Visits
                             </option>
                         </select>
                         <select class="form-control" name="ages">
-                            <option value="0" <?php if($ages == 0){ echo 'selected';} ?>>
+                            <option value="0">
                                 Ages 0&ndash;17
                             </option>
-                            <option value="18" <?php if($ages == 18){ echo 'selected';} ?>>
+                            <option value="18">
                                 Ages 18+
                             </option>
-                            <option value="all" <?php if($ages == 'all'){ echo 'selected';} ?>>
+                            <option value="all">
                                 All Ages
                             </option>
                         </select>
                         <select class="form-control" name="map">
-                            <option value="county" <?php if($map == 'county'){ echo 'selected';} ?>>
+                            <option value="county">
                                 County Map
                             </option>
-                            <option value="zip" <?php if($map == 'zip'){ echo 'selected';} ?>>
+                            <option value="zip">
                                 Zip Code Map
                             </option>
                         </select>
@@ -247,29 +227,29 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
                 <form id="histogram_form" class="form-inline">
                     <h3>Options</h3>
                     <select class="form-control" name="map">
-                        <option value="county" <?php if($map == 'county'){ echo 'selected';} ?>>
+                        <option value="county">
                             County Map
                         </option>
-                        <option value="zip" <?php if($map == 'zip'){ echo 'selected';} ?>>
+                        <option value="zip">
                             Zip Code Map
                         </option>
                     </select>
                     <select class="form-control" name="values">
-                        <option value="rate" <?php if($values == 'rate'){ echo 'selected';} ?>>
+                        <option value="rate">
                             Rate Per 10,000
                         </option>
-                        <option value="number" <?php if($values == 'number'){ echo 'selected';} ?>>
+                        <option value="number">
                             Number of Visits
                         </option>
                     </select>
                     <select class="form-control" name="ages">
-                        <option value="0" <?php if($ages == 0){ echo 'selected';} ?>>
+                        <option value="0">
                             Ages 0&ndash;17
                         </option>
-                        <option value="18" <?php if($ages == 18){ echo 'selected';} ?>>
+                        <option value="18">
                             Ages 18+
                         </option>
-                        <option value="all" <?php if($ages == 'all'){ echo 'selected';} ?>>
+                        <option value="all">
                             All Ages
                         </option>
                     </select>
@@ -302,19 +282,20 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
 </section>
 <!-- .section_context -->
 
-
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> -->
 <script type="text/javascript" src="js/ca-counties.js"></script>
+<script type="text/javascript" src="data/2009_by_zipcode.js"></script>
 <script type="text/javascript" src="js/mapbox_script.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
 <script type="text/javascript">
 
     var jsonDataCounty = <?php echo $jsonDataCounty; ?>;
-    var jsonDataZip = <?php echo $jsonDataCounty; ?>;
+    var jsonDataZip = <?php echo $jsonDataZip; ?>;
     var minMaxCounty = <?php echo $minMaxCounty; ?>;
     var minMaxZip = <?php echo $minMaxZip; ?>;
 
