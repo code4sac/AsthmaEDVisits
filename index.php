@@ -224,40 +224,66 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
     <div class="row">
         <div class="col-sm-11 col-sm-offset-1">
             <div class="histogram">
-                <form id="histogram_form" class="form-inline">
-                    <h3>Options</h3>
-                    <select class="form-control" name="map">
-                        <option value="county">
-                            County Map
-                        </option>
-                        <option value="zip">
-                            Zip Code Map
-                        </option>
-                    </select>
-                    <select class="form-control" name="values">
-                        <option value="rate">
-                            Rate Per 10,000
-                        </option>
-                        <option value="number">
-                            Number of Visits
-                        </option>
-                    </select>
-                    <select class="form-control" name="ages">
-                        <option value="0">
-                            Ages 0&ndash;17
-                        </option>
-                        <option value="18">
-                            Ages 18+
-                        </option>
-                        <option value="all">
-                            All Ages
-                        </option>
-                    </select>
-                    <button class="btn btn-primary" type="submit">Update</button>
-                </form>
-                <div class="histogram_svg"></div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <form id="histogram_form" class="form-inline">
+                            <h3>Options</h3>
+                            <select class="form-control" name="map">
+                                <option value="county" selected>
+                                    County Map
+                                </option>
+                                <option value="zip" >
+                                    Zip Code Map
+                                </option>
+                            </select>
+                            <select class="form-control" name="values">
+                                <option value="rate" >
+                                    Rate Per 10,000
+                                </option>
+                                <option value="number" selected>
+                                    Number of Visits
+                                </option>
+                            </select>
+                            <select class="form-control" name="ages">
+                                <option value="0" selected>
+                                    Ages 0&ndash;17
+                                </option>
+                                <option value="18" >
+                                    Ages 18+
+                                </option>
+                                <option value="all" >
+                                    All Ages
+                                </option>
+                            </select>
+                        </form>
+
+                        <div id="histogram_svg"></div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="histogram_stats">
+                            <div class="on_target">
+                                <h3>On Target</h3>
+                                <div class="number number_on">36</div>
+                                <div class="number_label">Number on Target</div>
+                                <div class="number average_rate">85</div>
+                                <div class="number_label">Average Rate</div>
+                                <div class="number average_total">3.4<span>k</span></div>
+                                <div class="number_label">Average Total</div>
+                            </div>
+                            <div class="off_target">
+                                <h3>Off Target</h3>
+                                <div class="number number_on">36</div>
+                                <div class="number_label">Number on Target</div>
+                                <div class="number average_rate">85</div>
+                                <div class="number_label">Average Rate</div>
+                                <div class="number average_total">3.4<span>k</span></div>
+                                <div class="number_label">Average Total</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <img style="width: 100%; height: auto; margin: 50px 0;" src="img/histogram.png" />
         </div>
     </div>
 
@@ -286,7 +312,7 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
 <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> -->
+<script src="js/resources/d3.min.js"></script>
 <script type="text/javascript" src="js/ca-counties.js"></script>
 <script type="text/javascript" src="data/2009_by_zipcode.js"></script>
 <script type="text/javascript" src="js/mapbox_script.js"></script>
@@ -300,7 +326,7 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
     var minMaxZip = <?php echo $minMaxZip; ?>;
 
     jQuery(document).ready(function(){
-        CHCF.dataMapInit();
+        // CHCF.dataMapInit();
         Histogram.init();
     });
 

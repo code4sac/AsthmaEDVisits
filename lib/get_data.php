@@ -63,49 +63,51 @@ function get_json_from_feature_data($feature_data, $map){
         $year = $d['year'];
 
         // Data
-        try {
-            $number_0_17 = $d['number_0_17'];
-        } catch (Exception $e) {
-            $number_0_17 = '';
-        }
-        try {
-            $number_18_plus = $d['number_18_plus'];
-        } catch (Exception $e) {
-            $number_18_plus = '';
-        }
-        try {
-            $number_all_ages = $d['number_all_ages'];
-        } catch (Exception $e) {
-            $number_all_ages = '';
-        }
-        try {
-            $rate_0_17 = $d['rate_0_17'];
-        } catch (Exception $e) {
-            $rate_0_17 = '';
-        }
-        try {
-            $rate_18_plus = $d['rate_18_plus'];
-        } catch (Exception $e) {
-            $rate_18_plus = '';
-        }
-        try {
-            $rate_all_ages = $d['rate_all_ages'];
-        } catch (Exception $e) {
-            $rate_all_ages = '';
-        }
+        if( $d['geography'] != 'CALIFORNIA'){
+            try {
+                $number_0_17 = $d['number_0_17'];
+            } catch (Exception $e) {
+                $number_0_17 = '';
+            }
+            try {
+                $number_18_plus = $d['number_18_plus'];
+            } catch (Exception $e) {
+                $number_18_plus = '';
+            }
+            try {
+                $number_all_ages = $d['number_all_ages'];
+            } catch (Exception $e) {
+                $number_all_ages = '';
+            }
+            try {
+                $rate_0_17 = $d['rate_0_17'];
+            } catch (Exception $e) {
+                $rate_0_17 = '';
+            }
+            try {
+                $rate_18_plus = $d['rate_18_plus'];
+            } catch (Exception $e) {
+                $rate_18_plus = '';
+            }
+            try {
+                $rate_all_ages = $d['rate_all_ages'];
+            } catch (Exception $e) {
+                $rate_all_ages = '';
+            }
 
-        $array = array(
-            'number_0_17' => $number_0_17,
-            'number_18_plus' => $number_18_plus,
-            'number_all_ages' => $number_all_ages,
-            'rate_0_17' => $rate_0_17,
-            'rate_18_plus' => $rate_18_plus,
-            'rate_all_ages' => $rate_all_ages,
-            'year' => $year,
-        );
+            $array = array(
+                'number_0_17' => $number_0_17,
+                'number_18_plus' => $number_18_plus,
+                'number_all_ages' => $number_all_ages,
+                'rate_0_17' => $rate_0_17,
+                'rate_18_plus' => $rate_18_plus,
+                'rate_all_ages' => $rate_all_ages,
+                'year' => $year,
+            );
 
-        $data[$geography] = $array;
+            $data[$geography] = $array;
 
+        }
     }
 
     $jsonData = json_encode($data);

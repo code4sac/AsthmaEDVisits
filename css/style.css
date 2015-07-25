@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 10px;
+    -webkit-font-smoothing: antialiased;
 }
 
 a,
@@ -216,7 +217,7 @@ section:first-of-type {
     :: Map
 ------------------------------------------------------------------------------*/
 
-path {
+#map path {
     -webkit-transition: fill 200ms;
     transition: fill 200ms;
 }
@@ -328,16 +329,6 @@ path {
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
 }
-/*#map_form #selected .label:after {
-    content: "\e088";
-    content: "\e083";
-    font-family: 'Glyphicons Halflings';
-    color: #666666;
-    position: absolute;
-    top: -2px;
-    right: .2em;
-}*/
-
 #map_form #selected a:hover,
 #map_form #selected a:focus {
     text-decoration: none;
@@ -346,10 +337,6 @@ path {
 #map_form #selected a:focus .label {
     background: #7C7C7C;
 }
-/*#map_form #selected a:hover .label:after,
-#map_form #selected a:focus .label:after {
-    color: #5c5c5c;
-}*/
 #map_form .download {
     position: absolute;
     bottom: 1.75em;
@@ -357,18 +344,97 @@ path {
 }
 
 
-/*--------------- Histogram ---------------*/
+/*------------------------------------------------------------------------------
+    :: Histogram
+------------------------------------------------------------------------------*/
 
-.histogram h3 {
+.histogram {
+    margin-bottom: 5em;
+}
+
+#histogram_form h3 {
     font-weight: 400;
     font-size: 1.4em;
     text-transform: uppercase;
-    padding: 2em 0 0.71em;
+    padding: 2em 0 0.7em;
     margin-top: 0;
     margin-bottom: 0;
 }
 
+/*--------------- d3 Histogram Graph ---------------*/
 
+
+#histogram_svg .bar rect {
+  fill: #009245;
+  shape-rendering: crispEdges;
+}
+
+#histogram_svg .bar rect.orange {
+    fill: orange;
+}
+
+#histogram_svg .bar rect.above_target {
+  fill: #ED1C24;
+  shape-rendering: crispEdges;
+}
+
+#histogram_svg .bar text {
+  fill: #666;
+}
+
+#histogram_svg .axis path,
+#histogram_svg .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*--------------- Sidebar stats ---------------*/
+
+.histogram_stats {
+    background: #E6E6E6;
+    text-align: center;
+    float: left;
+    width: 100%;
+    padding: 2em 0;
+    margin-top: 5.4em;
+}
+.histogram_stats h3 {
+    font-size: 1.6em;
+    font-weight: 700;
+    text-transform: none;
+    margin: 0;
+    padding: 0 0 1em;
+}
+.histogram_stats > div {
+    width: 50%;
+    float: left;
+}
+.histogram_stats .number {
+    font-size: 3.6em;
+    line-height: 0.9em;
+    font-weight: bold;
+}
+.histogram_stats .number span {
+    font-size: 0.5em;
+    line-height: 1em;
+}
+.histogram_stats .on_target {
+    border-right: 1px solid #CCCCCC;
+}
+.histogram_stats .on_target .number {
+    color: #009245;
+}
+.histogram_stats .off_target .number {
+    color: #ED1C24;
+}
+.histogram_stats .number_label {
+    font-size: 1.2em;
+    padding: 0 0 1.3em;
+}
+.histogram_stats .number_label:last-child {
+    padding: 0;
+} 
 
 
 

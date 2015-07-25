@@ -1,16 +1,3 @@
-var column_names = {
-    'number': {
-        '0': 'number_0_17',
-        '18': 'number_18_plus',
-        'all': 'number_all_ages',
-    },
-    'rate': {
-        '0': 'rate_0_17',
-        '18': 'rate_18_plus',
-        'all': 'rate_all_ages',
-    }
-}
-
 // Map colors light to dark
 var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
 
@@ -108,25 +95,50 @@ var MBox = {
 
         /* Add GeoJSON and TopoJSON to map
         ----------------------------------------------------------------------*/
+        var countyLayer = L.mapbox.featureLayer(countyGeoJSON);
+        drawShapesByDataValue(countyLayer);
+        initFeatureInteractivity(countyLayer);
 
+        var zipLayer = omnivore.topojson('/chcf-r1-1/js/ca-zip.json')
+                                     .on('ready', function() {
+                                        drawShapesByDataValue(this);
+                                        initFeatureInteractivity(this);
+                                     });
+
+        // Add layer to map
         if( self.map == 'county' ){
-            var geographyLayer = L.mapbox.featureLayer(countyGeoJSON)
-                                         .addTo(map);
-            drawShapesByDataValue();
-            drawLegendByDataValue();
-            initFeatureInteractivity();
+            countyLayer.addTo(map);
         } else {
-            var geographyLayer = omnivore.topojson('/chcf-r1-1/js/ca-zip.json')
-                                         .addTo(map)
-                                         .on('ready', function() {
-                                            drawShapesByDataValue();
-                                            drawLegendByDataValue(); 
-                                            initFeatureInteractivity();
-                                         });            
+            zipLayer.addTo(map);
+        }
+
+        drawLegendByDataValue();
+
+        /* Draw shapes, legend, and add interactivity
+        ----------------------------------------------------------------------*/
+
+        function drawShapesByDataValue(featureLayer){
+            featureLayer.eachLayer(function(e){
+                style = getStyle(e.feature);
+                e.setStyle(style);
+            });
+        }
+
+        function drawLegendByDataValue(){
+            map.legendControl.removeLegend(self.legend_html);
+
+            self.legend_html = getLegendHTML();
+            map.legendControl.addLegend(self.legend_html);
+        }
+
+        function initFeatureInteractivity(featureLayer){
+            featureLayer.eachLayer(function(e){
+                onEachFeature(e.feature, e); // e = layer
+            });
         }
 
 
-        /* Set styles for each GeoJSON feature
+        /* Map controls
         ----------------------------------------------------------------------*/
 
         // Update if the age filter changes
@@ -148,36 +160,35 @@ var MBox = {
             self.map = jQuery(this).val();
             self.updateHash();
             updateMapAndLegend();
+            toggleLayers();
         });
 
         function updateMapAndLegend(){
             // Update data_property and max
             self.data_property = column_names[self.values][self.ages];
             self.data_max = self.getMax();
-            // Update the map and the legend
-            drawShapesByDataValue();
+
+            drawShapesByDataValue(countyLayer);
+            drawShapesByDataValue(zipLayer);
             drawLegendByDataValue(); 
         }
 
-        function drawShapesByDataValue(){
-            geographyLayer.eachLayer(function(e){
-                style = getStyle(e.feature);
-                e.setStyle(style);
-            });
-        }
-
-        function drawLegendByDataValue(){
-            map.legendControl.removeLegend(self.legend_html);
-
-            self.legend_html = getLegendHTML();
-            map.legendControl.addLegend(self.legend_html);
-            // console.log(map.legendControl);
-        }
-
-        function initFeatureInteractivity(){
-            geographyLayer.eachLayer(function(e){
-                onEachFeature(e.feature, e); // e = layer
-            });
+        function toggleLayers(){
+            console.log('toggleLayers');
+            // // Update the map and the legend
+            // if( self.map == 'county' ){
+            //     console.log('updateMapAndLegend: county');
+            //     if( !map.hasLayer(countyLayer) ){
+            //         map.removeLayer(zipLayer);
+            //         map.addLayer(countyLayer);
+            //     }
+            // } else {
+            //     console.log('updateMapAndLegend: zip');
+            //     if( !map.hasLayer(zipLayer) ){
+            //         map.removeLayer(countyLayer);
+            //         map.addLayer(zipLayer);
+            //     }
+            // }
         }
 
 
