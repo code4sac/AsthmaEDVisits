@@ -9,6 +9,10 @@ require_once('lib/socrata.php');
 function get_api_feature_data($map){
     // $root_url = 'https://cdph.data.ca.gov';
     // $view_uid = 'b35e-g7k2';
+
+    $site_folder = 'chcf-r1-1';
+    // $site_folder = 'r1.2';
+
     $root_url = 'https://opendata.socrata.com';
     $app_token = '3hGsRhGZ89RPrTg0bByaNkrZy';
 
@@ -34,7 +38,7 @@ function get_api_feature_data($map){
     // TEMPORARY FOR LOCAL ZIP JSON -- DELETE AFTER API IS AVAILABLE
     if( $map == 'zip' ){
         $file  = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-        $file .= 'chcf-r1-1/data/2009_by_zipcode.json';
+        $file .= $site_folder . '/data/2009_by_zipcode.json';
         $feature_data = json_decode(file_get_contents($file), true);
     }
 

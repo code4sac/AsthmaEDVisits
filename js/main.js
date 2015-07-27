@@ -10,13 +10,30 @@ var CHCF = {
         // Subnav                
         AffixNav.init($window.width());
 
-        // $mapForm = jQuery('#mapForm');
-        // $select_ages = $mapForm.find('select[name="ages"]');
-        // $select_values = $mapForm.find('select[name="values"]');
-        // var ages = $select_ages.val();
-        // var values = $select_values.val();
-
+        // MapBox map init
         MBox.init(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip); // jsonData via index.php
+
+        // Top nav download button
+        $main_download = jQuery('.main_title_wrap a.download');
+        $main_download.on('click', function(){
+
+            var data = jQuery.extend(jsonDataCounty, jsonDataZip);
+            var csvData = make_csv_data(data); // utils.js
+
+            filename = 'AsthmaEDRates_county_and_zip.csv';
+
+            $(this)
+                .attr({
+                'download': filename,
+                'href': csvData,
+                'target': '_blank'
+            });
+
+        });
+
+
+        /* Window Resize
+        ----------------------------------------------------------------------*/
 
         $window.resize(function(){
             var win_width = jQuery(window).width();
@@ -428,7 +445,6 @@ var Histogram = {
         }        
     }
 }
-
 
 /*------------------------------------------------------------------------------
     :: Misc.

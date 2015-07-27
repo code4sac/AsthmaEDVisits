@@ -99,7 +99,7 @@ var MBox = {
         drawShapesByDataValue(countyLayer);
         initFeatureInteractivity(countyLayer);
 
-        var zipLayer = omnivore.topojson('/chcf-r1-1/js/ca-zip.json')
+        var zipLayer = omnivore.topojson(rootUrl + 'js/ca-zip.json')
                                      .on('ready', function() {
                                         drawShapesByDataValue(this);
                                         initFeatureInteractivity(this);
@@ -141,26 +141,58 @@ var MBox = {
         /* Map controls
         ----------------------------------------------------------------------*/
 
+        $mapForm = jQuery('#mapForm');
+
         // Update if the age filter changes
-        jQuery('#mapForm select[name="ages"]').on('change', function(event){
+        $mapForm.find('select[name="ages"]').on('change', function(event){
             self.ages = jQuery(this).val();
             self.updateHash();
             updateMapAndLegend();
         });
 
         // Update if the age filter changes
-        jQuery('#mapForm select[name="values"').on('change', function(event){
+        $mapForm.find('select[name="values"]').on('change', function(event){
             self.values = jQuery(this).val();
             self.updateHash();
             updateMapAndLegend();
         });
 
         // Update if the age filter changes
-        jQuery('#mapForm select[name="map"').on('change', function(event){
+        $mapForm.find('select[name="map"]').on('change', function(event){
             self.map = jQuery(this).val();
             self.updateHash();
             updateMapAndLegend();
             toggleLayers();
+        });
+
+        jQuery('#map_form a.download').on('click', function(event){
+
+            $selected_geo = jQuery('.selected_wrap #selected a');
+
+            if( $selected_geo ){
+                var selected_keys = []; 
+                $selected_geo.each(function(){
+                    selected_keys.push(jQuery(this).attr('data-name'));
+                });
+                var downloadData = {};
+                for( var i = 0; i < selected_keys.length; i++ ){
+                    var k = selected_keys[i];
+                    downloadData[k] = jsonData[k];
+                }
+            } else {
+                var downloadData = jsonData;
+            }
+
+            var csvData = make_csv_data(downloadData); // utils.js
+
+            filename = 'AsthmaEDRates_' + self.map + '.csv';
+
+            $(this)
+                .attr({
+                'download': filename,
+                'href': csvData,
+                'target': '_blank'
+            });
         });
 
         function updateMapAndLegend(){
@@ -175,20 +207,6 @@ var MBox = {
 
         function toggleLayers(){
             console.log('toggleLayers');
-            // // Update the map and the legend
-            // if( self.map == 'county' ){
-            //     console.log('updateMapAndLegend: county');
-            //     if( !map.hasLayer(countyLayer) ){
-            //         map.removeLayer(zipLayer);
-            //         map.addLayer(countyLayer);
-            //     }
-            // } else {
-            //     console.log('updateMapAndLegend: zip');
-            //     if( !map.hasLayer(zipLayer) ){
-            //         map.removeLayer(countyLayer);
-            //         map.addLayer(zipLayer);
-            //     }
-            // }
         }
 
 
@@ -253,7 +271,7 @@ var MBox = {
             if( !layer.feature.properties.emptyStyle ){
                 
                 var title = layer.feature.properties.title;
-                    slug = title.toLowerCase().replace(/\s+/g, '-');
+                    slug = title.toLowerCase().replace(/\s+/g, '_');
 
                 // Swap value of is_selected
                 layer.is_selected = !layer.is_selected;

@@ -1,4 +1,7 @@
 <?php
+$rootUrl = 'http://localhost/chcf-r1-1/';
+// $rootUrl = 'http://chcf.idmstage.com/r1.2/';
+
 require_once('lib/get_data.php');
 
 // Get `county` data from API and format for JSON
@@ -315,10 +318,13 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
 <script src="js/resources/d3.min.js"></script>
 <script type="text/javascript" src="js/ca-counties.js"></script>
 <script type="text/javascript" src="data/2009_by_zipcode.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/mapbox_script.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
 <script type="text/javascript">
+
+    var rootUrl = <?php echo '"' . $rootUrl . '"'; ?>;
 
     var jsonDataCounty = <?php echo $jsonDataCounty; ?>;
     var jsonDataZip = <?php echo $jsonDataZip; ?>;
@@ -326,7 +332,7 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
     var minMaxZip = <?php echo $minMaxZip; ?>;
 
     jQuery(document).ready(function(){
-        // CHCF.dataMapInit();
+        CHCF.dataMapInit();
         Histogram.init();
     });
 
