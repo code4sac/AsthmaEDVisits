@@ -96,16 +96,19 @@ var MBox = {
         /* Add GeoJSON and TopoJSON to map
         ----------------------------------------------------------------------*/
         var countyLayer = L.mapbox.featureLayer(countyGeoJSON);
-        drawShapesByDataValue(countyLayer);
+        drawShapesByDataValue(countyLayer, 'county');
         initFeatureInteractivity(countyLayer);
 
+        // Build Zip layer
+        // https://github.com/mapbox/leaflet-omnivore
+        // https://www.mapbox.com/mapbox.js/example/v1.0.0/omnivore-gpx/
         var zipLayer = omnivore.topojson(rootUrl + 'js/ca-zip.json')
                                      .on('ready', function() {
-                                        drawShapesByDataValue(this);
+                                        drawShapesByDataValue(this, 'zip');
                                         initFeatureInteractivity(this);
                                      });
 
-        // Add layer to map
+        // Add layer to map by self.map
         if( self.map == 'county' ){
             countyLayer.addTo(map);
         } else {
@@ -114,12 +117,13 @@ var MBox = {
 
         drawLegendByDataValue();
 
+
         /* Draw shapes, legend, and add interactivity
         ----------------------------------------------------------------------*/
 
-        function drawShapesByDataValue(featureLayer){
+        function drawShapesByDataValue(featureLayer, map_type){
             featureLayer.eachLayer(function(e){
-                style = getStyle(e.feature);
+                style = getStyle(e.feature, map_type);
                 e.setStyle(style);
             });
         }
@@ -162,7 +166,7 @@ var MBox = {
             self.map = jQuery(this).val();
             self.updateHash();
             updateMapAndLegend();
-            toggleLayers();
+            toggleLayers(self.map);
         });
 
         jQuery('#map_form a.download').on('click', function(event){
@@ -200,23 +204,41 @@ var MBox = {
             self.data_property = column_names[self.values][self.ages];
             self.data_max = self.getMax();
 
-            drawShapesByDataValue(countyLayer);
-            drawShapesByDataValue(zipLayer);
+            if( self.map == 'county' ){
+                drawShapesByDataValue(countyLayer, 'county');
+            } else {
+                drawShapesByDataValue(zipLayer, 'zip');
+            }
             drawLegendByDataValue(); 
         }
 
-        function toggleLayers(){
-            console.log('toggleLayers');
+        function toggleLayers(map_name){
+            // Remove any selected items
+            jQuery('#selected a').remove();
+            // map_name is the new requested map, not the current displayed
+            if( map_name == 'county' ){
+                map.removeLayer(zipLayer);
+                countyLayer.addTo(map);
+            } else {
+                map.removeLayer(countyLayer);
+                zipLayer.addTo(map);
+            }
         }
 
 
         /* Set styles for each GeoJSON feature
         ----------------------------------------------------------------------*/
-        function getStyle(feature) {
+        function getStyle(feature, map_type) {
             var name = feature.properties.name;
         
+            if( map_type == 'county' ){
+                var use_data = self.jsonDataCounty;
+            } else {
+                var use_data = self.jsonDataZip;
+            }
+
             try {
-                var value = jsonData[name][self.data_property];
+                var value = use_data[name][self.data_property];
             } catch(err) {
                 feature.properties.emptyStyle = true;
                 return emptyStyle;                
@@ -361,7 +383,7 @@ var MBox = {
             }, 100);
 
             if( !layer.is_selected ){
-                var style = getStyle(layer.feature);
+                var style = getStyle(layer.feature, self.map);
                 layer.setStyle(style);
             }
         }
