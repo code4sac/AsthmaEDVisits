@@ -122,6 +122,9 @@ var Histogram = {
         // Get data based on settings
         self.jsonData = self.getData();
 
+        // make histogram data sets
+        self.histogramData = self.makeHistorgramData();
+
         // Draw graph
         self.renderGraph();
     },
@@ -137,7 +140,7 @@ var Histogram = {
         var $histogram_svg = jQuery(self.histogram_root),
             histogram_svg_width = $histogram_svg.outerWidth();
 
-        var values = self.makeHistorgramDataArray();
+        var values = self.makeHistorgramData();
 
         var margin = {top: 100, right: 10, bottom: 30, left: 10},
             width = histogram_svg_width - margin.left - margin.right,
@@ -224,6 +227,29 @@ var Histogram = {
             .attr('class', 'x axis')
             .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
+
+
+        /* Sidebar Data elements
+        ----------------------------------------------------------------------*/
+
+        var targetData = self.getTargetStats();
+        console.log(targetData);
+        $stats = jQuery('.histogram_stats');
+
+        $stats.find('.on_target')
+              .find('.number_on').html(targetData.on.count).end()
+              .find('.average_rate').html(
+                    format_number(targetData.on.avg_rate)).end()
+              .find('.average_total').html(
+                    format_number(targetData.on.avg_number));
+
+        $stats.find('.off_target')
+              .find('.number_on').html(targetData.off.count).end()
+              .find('.average_rate').html(
+                    format_number(targetData.off.avg_rate)).end()
+              .find('.average_total').html(
+                    format_number(targetData.off.avg_number));
+
     },
     updateHistogram: function(){
         var self = this;
@@ -231,6 +257,7 @@ var Histogram = {
         // Update graph value
         self.data_property = self.setDataProperty();
 
+        self.target_for_2020 = self.set2020Target();
 
         /* SVG Preparation
         ----------------------------------------------------------------------*/
@@ -238,7 +265,7 @@ var Histogram = {
         var $histogram_svg = jQuery(self.histogram_root),
             histogram_svg_width = $histogram_svg.outerWidth();
 
-        var values = self.makeHistorgramDataArray();
+        var values = self.makeHistorgramData();
 
         var margin = {top: 100, right: 10, bottom: 30, left: 10},
             width = histogram_svg_width - margin.left - margin.right,
@@ -328,20 +355,47 @@ var Histogram = {
             .transition()
             .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
+
+
+        /* Sidebar Data elements
+        ----------------------------------------------------------------------*/
+
+        var targetData = self.getTargetStats();
+        console.log(targetData);
+        $stats = jQuery('.histogram_stats');
+
+        $stats.find('.on_target')
+              .find('.number_on').html(targetData.on.count).end()
+              .find('.average_rate').html(
+                    format_number(targetData.on.avg_rate)).end()
+              .find('.average_total').html(
+                    format_number(targetData.on.avg_number));
+
+        $stats.find('.off_target')
+              .find('.number_on').html(targetData.off.count).end()
+              .find('.average_rate').html(
+                    format_number(targetData.off.avg_rate)).end()
+              .find('.average_total').html(
+                    format_number(targetData.off.avg_number));
     },
-    makeHistorgramDataArray: function(){
+    makeHistorgramData: function(){
         var self = this;
-        // Make a list of values based on form settings for values and ages
-        var values = [];
+
+        var map = self.settings.map;
+        var values = self.settings.values;
+        var ages = self.settings.ages;
+
+        var data = [];
+
+        // Loop through geo data
         for( var k in self.jsonData ){
             if( self.jsonData.hasOwnProperty(k) && k != 'CALIFORNIA'){
-                var num = self.jsonData[k][self.data_property];
-                var new_obj = [k, parseInt(num)];
-                values.push(new_obj);
+                var obj = self.jsonData[k];
+                data.push([k, obj[self.data_property]]);
             }
         }
 
-        return values
+        return data;
     },
     initForm: function(){
         var self = this;
@@ -389,6 +443,64 @@ var Histogram = {
         } else {
             return jsonDataZip;
         }
+    },
+    getTargetStats: function(){
+        var self = this;
+
+        var on_target = [];
+        var off_target = [];
+
+        var ages = self.settings.ages;
+        var values = self.settings.values;
+
+        // Sort geo data for target 2020
+        var on_target = [];
+        var off_target = [];
+        var sort_on = self.data_property;
+
+        for( var k in self.jsonData ){
+            if( self.jsonData.hasOwnProperty(k) && k != 'CALIFORNIA'){
+                var obj = self.jsonData[k];
+                if( obj[sort_on] <= self.target_for_2020 ){
+                    on_target.push(obj);
+                } else {
+                    off_target.push(obj);
+                }
+            }
+        }
+
+        var rate_key = 'rate_0_17';
+        var number_key = 'number_0_17';
+
+        var data = {
+            'on': {
+                'count': on_target.length,
+                'avg_rate': get_average(on_target, rate_key),
+                'avg_number': get_average(on_target, number_key),
+            },
+            'off': {
+                'count': off_target.length,
+                'avg_rate': get_average(off_target, rate_key),
+                'avg_number': get_average(off_target, number_key),
+            }
+        }
+
+        function get_average(values, data_property){
+            var sum = 0;
+            for( var i = 0; i < values.length; i++ ){
+                var val = values[i][data_property];
+                if( val ){
+                    sum = sum + parseInt(val,10);
+                }
+            }
+            if( values.length > 0 ){
+                return Math.floor(sum / values.length * 10) / 10;
+            } else {
+                return 0;
+            }
+        }
+
+        return data;
     },
     xRangeMax: function(){
         var self = this;
@@ -438,11 +550,18 @@ var Histogram = {
     set2020Target: function(){
         var self = this;
 
-        if( self.settings.map == 'county' ){
-            return 35;
-        } else {
-            return 300;
-        }        
+        var targets = {
+            'county': {
+                'number': 1000,
+                'rate': 35,
+            },
+            'zip': {
+                'number': 300,
+                'rate': 35,
+            }
+        }
+
+        return targets[self.settings.map][self.settings.values];
     }
 }
 

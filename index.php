@@ -267,20 +267,20 @@ $minMaxZip = get_min_max_of_data($featureDataZip);
                         <div class="histogram_stats">
                             <div class="on_target">
                                 <h3>On Target</h3>
-                                <div class="number number_on">36</div>
+                                <div class="number number_on"></div>
                                 <div class="number_label">Number on Target</div>
-                                <div class="number average_rate">85</div>
+                                <div class="number average_rate"></div>
                                 <div class="number_label">Average Rate</div>
-                                <div class="number average_total">3.4<span>k</span></div>
+                                <div class="number average_total"></div>
                                 <div class="number_label">Average Total</div>
                             </div>
                             <div class="off_target">
                                 <h3>Off Target</h3>
-                                <div class="number number_on">36</div>
+                                <div class="number number_on"></div>
                                 <div class="number_label">Number on Target</div>
-                                <div class="number average_rate">85</div>
+                                <div class="number average_rate"></div>
                                 <div class="number_label">Average Rate</div>
-                                <div class="number average_total">3.4<span>k</span></div>
+                                <div class="number average_total"></div>
                                 <div class="number_label">Average Total</div>
                             </div>
                         </div>
