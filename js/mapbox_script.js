@@ -1,6 +1,3 @@
-// Map colors light to dark
-var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
-
 
 /* Vector shape styles
 ------------------------------------------------------------------------------*/
@@ -10,7 +7,7 @@ var defaultStyle = {
     opacity: 1,
     color: 'white',
     fillOpacity: 0.7,
-    fillColor: colors[0] // color overrided in getStyle()
+    fillColor: red_colors[0] // color overrided in getStyle()
 }
 
 var hoverStyle = {
@@ -172,8 +169,9 @@ var MBox = {
         jQuery('#map_form a.download').on('click', function(event){
 
             $selected_geo = jQuery('.selected_wrap #selected a');
+            console.log($selected_geo);
 
-            if( $selected_geo ){
+            if( $selected_geo.length != 0 ){
                 var selected_keys = []; 
                 $selected_geo.each(function(){
                     selected_keys.push(jQuery(this).attr('data-name'));
@@ -186,6 +184,7 @@ var MBox = {
             } else {
                 var downloadData = jsonData;
             }
+            console.log(downloadData);
 
             var csvData = make_csv_data(downloadData); // utils.js
 
@@ -238,11 +237,13 @@ var MBox = {
             }
 
             try {
+                // See if feature name is in data
                 var value = use_data[name][self.data_property];
             } catch(err) {
+                // Return empty style if feature name is not in data
                 feature.properties.emptyStyle = true;
                 return emptyStyle;                
-            }
+            }           
 
             var style = defaultStyle;
             style.fillColor = getColor(value);
@@ -252,18 +253,28 @@ var MBox = {
         }
 
         // get color depending on asthma value
-        function getColor(d) {
+        function getColor(d, use_colors, number) {
+            number = typeof number !== 'undefined' ? number : 8;
+            use_colors = typeof use_colors !== 'undefined' ? use_colors : red_colors;
 
-            var q = self.data_max / 8,
+            // console.log(use_colors);
+
+            var q = self.data_max / number,
                 v1 = 0,
                 v2 = 0;
 
-            for( var i = 1; i <= 8; i++ ){
+            for( var i = 1; i <= number; i++ ){
                 v1 = Math.ceil(q*(i-1))
                 v2 = Math.ceil(q*(i))
 
                 if( v1 <= d && d < v2 ){
-                    return colors[i-1];
+                    return use_colors[i-1];
+                }
+
+                // If `d` is beyond the data_max (ZIP codes) after 8 times
+                // Then use the last color
+                if( i == number && v1 <= d && v2 <= d ){
+                    return use_colors[i-1]; // the last color
                 }
             }
         }
@@ -340,7 +351,7 @@ var MBox = {
             }
 
             if( value == null ){
-                value = '<5';
+                value = '0';
             }
 
             if( self.values == 'rate' ){
@@ -428,32 +439,62 @@ var MBox = {
 
         function getLegendHTML(){
 
-            var q = self.data_max / 8,
-                grades = [];
-                labels = [],
-                from = '',
-                to = '';
-
-            for( var i = 1; i <= 8; i++){
-                grades[i-1] = Math.ceil(q * (i - 1));
-            }
-
-            for (var i = 0; i < grades.length; i++) {
-                from = grades[i];
-                to = grades[i + 1];
-
-                labels.push(
-                    '<li><span class="swatch" style="background:' + getColor(from + 1) + '"></span> ' +
-                    from + (to ? '&ndash;' + to : '+')) + '</li>';
-            }
-
+            // Set top text
             if( self.values == 'number' ){
                 var text = '<span>Number of ED Visits</span><ul>';
             } else {
                 var text = '<span>Rate per 10,000</span><ul>';
             }
 
-            return text + labels.join('') + '</ul>';
+            // Set intervals and labels
+            if( self.values == 'number' ){
+                var intervals = setLegendIntervals(0, self.data_max, 8);
+                var labels = makeLegendLabels(intervals);
+                return text + labels.join('') + '</ul>';
+            } else {
+                var interv_1 = setLegendIntervals(0, 28, 2);
+                var interv_2 = setLegendIntervals(29, self.data_max, 8);
+                interv_1 = interv_1.concat(interv_2);
+                var labels = makeLegendLabels(interv_1, true, 2);
+                return text + labels.join('') + '</ul>';                
+            }
+        }
+
+        function setLegendIntervals(min, max, number){
+
+            var q = (max - min) / number; // set `number` intervals for range
+                intervals = [];
+            for( var i = 1; i <= number; i++){
+                intervals[i-1] = Math.ceil(min + (q * (i - 1)));
+            }
+            return intervals;
+        }
+
+        function makeLegendLabels(intervals, use_green, green_count){
+            var labels = [];
+            for (var i = 0; i < intervals.length; i++) {
+                from = intervals[i];
+                to = intervals[i + 1];
+
+                if( use_green ){
+                    if(i < green_count){
+                        color = green_colors[i];
+                    } else {
+                        color = red_colors[i-green_count];
+                    }
+                } else {
+                    color = red_colors[i]
+                }
+
+                // color = red_colors[i]
+
+                to = to ? '&ndash;' + to : '+';
+
+                labels.push(
+                    '<li><span class="swatch" style="background:' + color + '"></span> ' +
+                    from + to + '</li>');
+            }
+            return labels;
         }
 
 

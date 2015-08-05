@@ -3,6 +3,7 @@ body {
     padding: 0;
     font-size: 10px;
     -webkit-font-smoothing: antialiased;
+    font-family: 'Open Sans';
 }
 
 a,
@@ -25,10 +26,23 @@ button {
 .navbar {
     border-radius: 0;
     margin-bottom: 0;
+    background: #336866;
+    border-bottom: 2px solid #F46D00;
+}
+.navbar .navbar-brand {
+    color: white;
 }
 .nav > li > a {
     font-size: 1.4em;
+    font-weight: 700;
+    color: #333;
 }
+
+/*.nav-pills>li.active>a,
+.nav-pills>li.active>a:focus,
+.nav-pills>li.active>a:hover {
+    background: #336866;
+}*/
 
 /*------------------------------------------------------------------------------
     :: Sections
@@ -52,9 +66,9 @@ section {
 }
 .section_title:before {
     content: '';
-    border-top: 1px solid #1A1A1A;
+    border-top: 1px solid #999;
     position: relative;
-    top: 0.55em;
+    top: 0.95em;
     display: block;
     width: 100%;
 }
@@ -96,26 +110,11 @@ p.intro {
 .main_title_wrap {
     position: relative;
 }
-.indicator_dropdown {
-    position: absolute;
-    right: 0;
-    bottom: 6.5em;
-    width: 302px;
-}
-.indicator_dropdown span {
-    font-size: 1.6em;
-    font-weight: 700;
-    padding-right: 10px;
-}
-.indicator_dropdown form {
-    font-size: 1.2em;
-    margin: -5px 0 0 6.8em;
-}
 
 /*--------------- Subnav ---------------*/
 
 .subnav .nav {
-    border-top: 3px solid #000;
+    border-top: 3px solid #333;
     position: relative;
 }
 .subnav .nav > li > a {
@@ -191,23 +190,28 @@ section:first-of-type {
 .number_box {
     background: #E6E6E6;
 }
-
+.number_box h3 {
+    margin: 0;
+    padding: 0.7em 0.8em 0em;
+    font-size: 2.1em;
+}
 .number_box ul {
     padding: 1.5em 1.7em;
     margin: 0;
     list-style: none;
 }
 .number_box ul li {
-    margin-bottom: 1.2em;
+    margin-bottom: 1.4em;
 }
 .number_box .text {
-    font-size: 1.4em;
-    text-transform: uppercase;
+    font-size: 1.2em;
+    /*text-transform: uppercase;*/
 }
 .number_box .number {
     font-weight: 700;
-    font-size: 4.2em;
+    font-size: 3.2em;
     line-height: 1em;
+    padding-bottom: 0.075em;
 }
 .number_box .number span {
     font-size: 0.5em;
@@ -365,16 +369,12 @@ section:first-of-type {
 
 
 #histogram_svg .bar rect {
-  fill: #009245;
+  /*fill: #009245;*/
   shape-rendering: crispEdges;
 }
 
-#histogram_svg .bar rect.orange {
-    fill: orange;
-}
-
 #histogram_svg .bar rect.above_target {
-  fill: #ED1C24;
+  /*fill: #ED1C24;*/
   shape-rendering: crispEdges;
 }
 
@@ -389,6 +389,21 @@ section:first-of-type {
   shape-rendering: crispEdges;
 }
 
+#histogram_svg .target {
+    opacity: 0;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+#histogram_svg .target.show {
+    opacity: 1;
+}
+#histogram_svg .target text {
+    font-size: 16px;
+    fill: #666666;
+}
+
 /*--------------- Sidebar stats ---------------*/
 
 .histogram_stats {
@@ -399,6 +414,15 @@ section:first-of-type {
     padding: 2em 0;
     margin-top: 5.4em;
 }
+.histogram_stats.rate .number_stats {
+    position: absolute;
+    left: -9999px;
+}
+.histogram_stats.number .rate_stats {
+    position: absolute;
+    left: -9999px;
+}
+
 .histogram_stats h3 {
     font-size: 1.6em;
     font-weight: 700;
@@ -406,7 +430,7 @@ section:first-of-type {
     margin: 0;
     padding: 0 0 1em;
 }
-.histogram_stats > div {
+.histogram_stats .on_target {
     width: 50%;
     float: left;
 }
@@ -423,10 +447,10 @@ section:first-of-type {
     border-right: 1px solid #CCCCCC;
 }
 .histogram_stats .on_target .number {
-    color: #009245;
+    color: #31a354;
 }
 .histogram_stats .off_target .number {
-    color: #ED1C24;
+    color: #E31A1C;
 }
 .histogram_stats .number_label {
     font-size: 1.2em;
@@ -436,5 +460,11 @@ section:first-of-type {
     padding: 0;
 } 
 
+.histogram_stats .footnotes {
+    padding: 3em 2.2em 0;
+    text-align: left;
+    text-indent: -5px;
+    color: #666;
+}
 
 

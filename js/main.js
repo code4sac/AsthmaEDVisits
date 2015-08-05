@@ -206,7 +206,10 @@ var Histogram = {
                 return y(d.count);
             })
             .attr('width', bin_width - 1)
-            .attr('height', function(d) { return height - y(d.count); });
+            .attr('height', function(d) { return height - y(d.count); })
+            .attr('fill', function(d){
+                return self.getRectColor(x(d.x), x(28), bin_width);
+            });
 
         bar.append('text')
             .attr('dy', '.75em')
@@ -228,12 +231,30 @@ var Histogram = {
             .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
 
+        var target_line_offset = 40; // pushes line over within target g
+        var target = svg.append('g')
+                        .attr('class', 'target')
+                        .attr('transform', 'translate('+ (x(28)-target_line_offset) +'0,-40)');
+
+        target.append('text')
+                .text('2022 Target');
+
+        target.append('rect')
+                .attr('x', target_line_offset)
+                .attr('y', 7)
+                .attr('width', 1)
+                .attr('height', 210)
+                .attr('fill', '#666666');
+
+        if( self.settings.values == 'rate' ){
+            target.attr('class', 'target show');
+        }
 
         /* Sidebar Data elements
         ----------------------------------------------------------------------*/
 
         var targetData = self.getTargetStats();
-        console.log(targetData);
+        // console.log(targetData);
         $stats = jQuery('.histogram_stats');
 
         $stats.find('.on_target')
@@ -330,7 +351,11 @@ var Histogram = {
                     return y(d.count);
                 })
                 .attr('width', bin_width - 1)
-                .attr('height', function(d) { return height - y(d.count); });
+                .attr('height', function(d) { return height - y(d.count); })
+                .attr('fill', function(d){
+                    console.log(d);
+                    return self.getRectColor(x(d.x), x(28), bin_width);
+                });
 
         svg.selectAll('.bar text')
             .data(bins)
@@ -356,27 +381,41 @@ var Histogram = {
             .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
 
+        var target = svg.select('.target');
+        if( self.settings.values == 'rate' && self.settings.ages == '0' ){
+            target.attr('class', 'target show');
+        } else {
+            target.attr('class', 'target');
+        }
 
         /* Sidebar Data elements
         ----------------------------------------------------------------------*/
 
         var targetData = self.getTargetStats();
-        console.log(targetData);
+        // console.log(targetData);
         $stats = jQuery('.histogram_stats');
 
-        $stats.find('.on_target')
-              .find('.number_on').html(targetData.on.count).end()
-              .find('.average_rate').html(
-                    format_number(targetData.on.avg_rate)).end()
-              .find('.average_total').html(
-                    format_number(targetData.on.avg_number));
+        if( self.settings.values == 'rate' ){
+            $stats.find('.on_target')
+                  .find('.number_on').html(targetData.on.count).end()
+                  .find('.average_rate').html(
+                        format_number(targetData.on.avg_rate)).end()
+                  .find('.average_total').html(
+                        format_number(targetData.on.avg_number));
 
-        $stats.find('.off_target')
-              .find('.number_on').html(targetData.off.count).end()
-              .find('.average_rate').html(
-                    format_number(targetData.off.avg_rate)).end()
-              .find('.average_total').html(
-                    format_number(targetData.off.avg_number));
+            $stats.find('.off_target')
+                  .find('.number_on').html(targetData.off.count).end()
+                  .find('.average_rate').html(
+                        format_number(targetData.off.avg_rate)).end()
+                  .find('.average_total').html(
+                        format_number(targetData.off.avg_number));
+
+            $stats.removeClass('number').addClass('rate');
+        } else {
+            $stats.find('.average_total').html(
+                        format_number(targetData.on.avg_number));
+            $stats.removeClass('rate').addClass('number');
+        }
     },
     makeHistorgramData: function(){
         var self = this;
@@ -434,6 +473,25 @@ var Histogram = {
             ages: self.form.find('select[name="ages"]').val(),
         }
         return settings;
+    },
+    getRectColor: function(d, target_x, bin_width){
+        var self = this;
+
+        if( self.settings.values == 'rate' && self.settings.ages == '0' ){
+
+            if( target_x < d ){ // all of bin is over target
+                return red_colors[4];
+            }
+            if( d <= target_x && target_x < (d + bin_width) ){
+                console.log(d + ' ' + target_x + ' ' + bin_width);
+                return red_colors[2];
+            }
+            if( d + bin_width < target_x ){
+                return green_colors[0];
+            }
+        } else {
+            return '#4682B4';
+        }
     },
     getData: function(){
         var self = this;
@@ -536,9 +594,17 @@ var Histogram = {
             bins.push({count: 0, x: interval*i});
         }
 
+        var last_bin_lower = bins[19]['x']; // bottom bound of last bin
+
         for( var j = 0; j < values.length; j++ ){
-            var val = values[j][1];
-            var idx = Math.floor(val / interval) || 0;
+            var val = values[j][1] || 0;
+
+            var idx = Math.floor(val / interval);
+
+            // Handle zips having a higher range *** DELETE once figure out scale ***
+            if( idx >= 20 ){
+                idx = 19;
+            }
             bins[idx]['count'] += 1;
         }
         return bins;
@@ -553,11 +619,11 @@ var Histogram = {
         var targets = {
             'county': {
                 'number': 1000,
-                'rate': 35,
+                'rate': 28,
             },
             'zip': {
                 'number': 300,
-                'rate': 35,
+                'rate': 28,
             }
         }
 

@@ -10,7 +10,7 @@ function get_api_feature_data($map){
     // $root_url = 'https://cdph.data.ca.gov';
     // $view_uid = 'b35e-g7k2';
 
-    $site_folder = 'chcf-r1-1';
+    $site_folder = 'chcf';
     // $site_folder = 'r1.2';
 
     $root_url = 'https://opendata.socrata.com';
@@ -21,26 +21,19 @@ function get_api_feature_data($map){
             $view_uid = 'k9aw-e87g';
             break;
         case 'zip':
-            $view_uid = 'k9aw-e87g';
+            $view_uid = 'b6ab-ei8z'; // https://opendata.socrata.com/dataset/Asthma-Emergency-Department-Visit-Rates-By-ZIP-Cod/b6ab-ei8z
             break;
         default:
             $view_uid = 'k9aw-e87g';
             break;
     }
 
-    if( $map == 'county' ){
-        $socrata = new Socrata($root_url, $app_token);
-        $params = array();
+    $socrata = new Socrata($root_url, $app_token);
+    $params = array(
+        '$limit' => 1200, // http://dev.socrata.com/docs/queries.html
+    );
 
-        $feature_data = $socrata->get("/resource/$view_uid.json", $params);        
-    }
-
-    // TEMPORARY FOR LOCAL ZIP JSON -- DELETE AFTER API IS AVAILABLE
-    if( $map == 'zip' ){
-        $file  = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-        $file .= $site_folder . '/data/2009_by_zipcode.json';
-        $feature_data = json_decode(file_get_contents($file), true);
-    }
+    $feature_data = $socrata->get("/resource/$view_uid.json", $params);        
 
     return $feature_data;
 }
@@ -212,9 +205,25 @@ function get_min_max_of_data($feature_data){
         ),
     );
 
-    return json_encode($minMax);
+    return $minMax;
 }
 
+
+/* Compare the max rate for zip and county so they are on the same scale
+ *
+ * !!! Zip has huge rate numbers, and we'll default to county for now !!!
+*/
+function compare_rate_max($countyMinMax, $zipMinMax){
+    $c_max = $countyMinMax['rate']['max'];
+    $z_max = $zipMinMax['rate']['max'];
+    $max = max(array($c_max, $z_max));
+
+    // DELETE ONCE SCALE FIGURED
+    $max = $c_max;
+    // DELETE ONCE SCALE FIGURED
+
+    return $max;
+}
 
 /*------------------------------------------------------------------------------
     :: Helpers
