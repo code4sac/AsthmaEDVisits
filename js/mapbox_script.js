@@ -6,7 +6,7 @@ var defaultStyle = {
     weight: 1,
     opacity: 1,
     color: 'white',
-    fillOpacity: 0.7,
+    fillOpacity: 0.8,
     fillColor: red_colors[0] // color overrided in getStyle()
 }
 
@@ -66,6 +66,9 @@ var MBox = {
         self.data_property = column_names[self.values][self.ages];
         self.data_max = self.getMax();
 
+        // Build color intervals
+        self.intervals = self.buildColorIntervals();
+
         // Fire it up!
         self.onReady();
     },
@@ -99,7 +102,7 @@ var MBox = {
         // Build Zip layer
         // https://github.com/mapbox/leaflet-omnivore
         // https://www.mapbox.com/mapbox.js/example/v1.0.0/omnivore-gpx/
-        var zipLayer = omnivore.topojson(rootUrl + 'js/ca-zip.json')
+        var zipLayer = omnivore.topojson(rootUrl + 'js/CA_2010_ZCTA5CE.json')
                                      .on('ready', function() {
                                         drawShapesByDataValue(this, 'zip');
                                         initFeatureInteractivity(this);
@@ -169,7 +172,6 @@ var MBox = {
         jQuery('#map_form a.download').on('click', function(event){
 
             $selected_geo = jQuery('.selected_wrap #selected a');
-            console.log($selected_geo);
 
             if( $selected_geo.length != 0 ){
                 var selected_keys = []; 
@@ -184,7 +186,6 @@ var MBox = {
             } else {
                 var downloadData = jsonData;
             }
-            console.log(downloadData);
 
             var csvData = make_csv_data(downloadData); // utils.js
 
@@ -202,6 +203,7 @@ var MBox = {
             // Update data_property and max
             self.data_property = column_names[self.values][self.ages];
             self.data_max = self.getMax();
+            self.intervals = self.buildColorIntervals();
 
             if( self.map == 'county' ){
                 drawShapesByDataValue(countyLayer, 'county');
@@ -227,6 +229,7 @@ var MBox = {
 
         /* Set styles for each GeoJSON feature
         ----------------------------------------------------------------------*/
+
         function getStyle(feature, map_type) {
             var name = feature.properties.name;
         
@@ -253,32 +256,65 @@ var MBox = {
         }
 
         // get color depending on asthma value
-        function getColor(d, use_colors, number) {
-            number = typeof number !== 'undefined' ? number : 8;
-            use_colors = typeof use_colors !== 'undefined' ? use_colors : red_colors;
+        function getColor(d) {
 
-            // console.log(use_colors);
+            var intervals = self.intervals;
+            var range = [0, intervals.length];
+            var mid;
 
-            var q = self.data_max / number,
-                v1 = 0,
-                v2 = 0;
+            d = d == null ? 0 : d; // remove null values
 
-            for( var i = 1; i <= number; i++ ){
-                v1 = Math.ceil(q*(i-1))
-                v2 = Math.ceil(q*(i))
-
-                if( v1 <= d && d < v2 ){
-                    return use_colors[i-1];
-                }
-
-                // If `d` is beyond the data_max (ZIP codes) after 8 times
-                // Then use the last color
-                if( i == number && v1 <= d && v2 <= d ){
-                    return use_colors[i-1]; // the last color
+            for( var i = 0; i < intervals.length; i++ ){
+                if( intervals[i].start <= d && d <= intervals[i].end + 1){
+                    return intervals[i].color;
+                } else {
+                    // color large values
+                    if( intervals[intervals.length - 1].start <= d ){
+                        return intervals[intervals.length - 1].color;
+                    }
                 }
             }
         }
 
+
+        /* Map legend
+        ------------------------------------------------------------*/
+
+        function getLegendHTML(){
+            // use self.intervals with colors to build map legend
+
+            // Set top text
+            if( self.values == 'number' ){
+                var text = '<span>Number of ED Visits</span><ul>';
+            } else {
+                var text = '<span>Rate per 10,000</span><ul>';
+            }
+
+            var labels = [];
+
+            var color,
+                from,
+                to;
+
+            for( var i = 0; i < self.intervals.length; i++ ){
+                from = self.intervals[i].start;
+                to = self.intervals[i].end;
+                color = self.intervals[i].color;
+
+                if( i < self.intervals.length - 1 ){
+                    to = '&ndash;' + to;
+                } else {
+                    to = '+';
+                }
+
+                labels.push(
+                    '<li><span class="swatch" style="background:' + color + '"></span> ' +
+                    from + to + '</li>'
+                );
+            }
+
+            return text + labels.join('') + '</ul>';
+        }
 
         /* Set actions on each GeoJSON feature
         ----------------------------------------------------------------------*/
@@ -303,8 +339,13 @@ var MBox = {
             // Ignore click on empty zip
             if( !layer.feature.properties.emptyStyle ){
                 
-                var title = layer.feature.properties.title;
-                    slug = title.toLowerCase().replace(/\s+/g, '_');
+                if( self.map == 'county' ){
+                    var title = layer.feature.properties.title;
+                } else {
+                    var title = layer.feature.properties.name;
+                }
+
+                slug = title.toLowerCase().replace(/\s+/g, '_');
 
                 // Swap value of is_selected
                 layer.is_selected = !layer.is_selected;
@@ -341,7 +382,6 @@ var MBox = {
 
         function mousemove(e) {
             var layer = e.target;
-            var title = layer.feature.properties.title;
             var name = layer.feature.properties.name;
 
             try {
@@ -362,8 +402,10 @@ var MBox = {
 
             if( self.map == 'county' ){
                 var geo_type = 'County';
+                var title = layer.feature.properties.title;
             } else {
                 var geo_type = 'Zip Code';
+                var title = name;
             }
 
             popup.setLatLng(e.latlng);
@@ -434,70 +476,6 @@ var MBox = {
         });
 
 
-        /* Map legend
-        ------------------------------------------------------------*/
-
-        function getLegendHTML(){
-
-            // Set top text
-            if( self.values == 'number' ){
-                var text = '<span>Number of ED Visits</span><ul>';
-            } else {
-                var text = '<span>Rate per 10,000</span><ul>';
-            }
-
-            // Set intervals and labels
-            if( self.values == 'number' ){
-                var intervals = setLegendIntervals(0, self.data_max, 8);
-                var labels = makeLegendLabels(intervals);
-                return text + labels.join('') + '</ul>';
-            } else {
-                var interv_1 = setLegendIntervals(0, 28, 2);
-                var interv_2 = setLegendIntervals(29, self.data_max, 8);
-                interv_1 = interv_1.concat(interv_2);
-                var labels = makeLegendLabels(interv_1, true, 2);
-                return text + labels.join('') + '</ul>';                
-            }
-        }
-
-        function setLegendIntervals(min, max, number){
-
-            var q = (max - min) / number; // set `number` intervals for range
-                intervals = [];
-            for( var i = 1; i <= number; i++){
-                intervals[i-1] = Math.ceil(min + (q * (i - 1)));
-            }
-            return intervals;
-        }
-
-        function makeLegendLabels(intervals, use_green, green_count){
-            var labels = [];
-            for (var i = 0; i < intervals.length; i++) {
-                from = intervals[i];
-                to = intervals[i + 1];
-
-                if( use_green ){
-                    if(i < green_count){
-                        color = green_colors[i];
-                    } else {
-                        color = red_colors[i-green_count];
-                    }
-                } else {
-                    color = red_colors[i]
-                }
-
-                // color = red_colors[i]
-
-                to = to ? '&ndash;' + to : '+';
-
-                labels.push(
-                    '<li><span class="swatch" style="background:' + color + '"></span> ' +
-                    from + to + '</li>');
-            }
-            return labels;
-        }
-
-
         /* Add Attribution
         ------------------------------------------------------------*/
 
@@ -553,5 +531,60 @@ var MBox = {
             // `rate` has max/min for 1 group [all, 0-17, 18+]
             return max_data[self.values]['max'];
         }
+    },
+    buildColorIntervals: function(){
+        var self = this;
+
+        var min = 0,
+            max = self.data_max,
+            split_at = 28,
+            values = self.values,
+            ages = self.ages;
+
+        var intervals = [];
+
+        if( values == 'rate' && ages == 0 ){
+            // Build intervals for 2022 target
+            intervals = self.makeIntervals(min, split_at, 2);
+            intervals_2 = self.makeIntervals(split_at + 1, max, 8);
+            intervals.push.apply(intervals, intervals_2);
+            // Add colors from utils.js for 2022 (includes greens)
+            intervals = self.addColorsToIntervals(intervals, colors2022);
+        } else {
+            // Build intervals for everyone else
+            intervals = self.makeIntervals(0, max, 8);
+            // Add colors from utils.js for regular reds
+            intervals = self.addColorsToIntervals(intervals, colors);
+        }
+
+        return intervals;
+    },
+    makeIntervals: function(min, max, number){
+
+        // Get range of each interval between `min` and `max`
+        var width = (max - min) / number;
+        var intervals = [];
+
+        // Build intervals, a list of {start: ?, end: ?} objects
+        for( var i = 0; i < number; i++){
+            var start_val = Math.ceil(min + (width * i));
+            intervals[i] = {'start': start_val};
+
+            // Add ending values to previous item
+            if( 0 < i && i < number ){
+                intervals[i-1]['end'] = start_val - 1;
+            }
+            // Make last ending the `max`
+            if( i == number - 1 ){
+                intervals[i]['end'] = max;
+            }
+        }
+        return intervals;
+    },
+    addColorsToIntervals: function(intervals, colors){
+        for( var i = 0; i < intervals.length; i++){
+            intervals[i]['color'] = colors[i];
+        }
+        return intervals;
     }
 } // end var MBox

@@ -114,7 +114,7 @@ $minMaxZip = json_encode($minMaxZip);
         </div>
         <div class="col-sm-3">
             <div class="number_box">
-                <h3>2012 ED Vistits</h3>
+                <h3>2012 ED Visits</h3>
                 <ul>
                     <li>
                         <div class="number">145,360</div>
@@ -154,7 +154,7 @@ $minMaxZip = json_encode($minMaxZip);
         <div class="col-sm-12">
             <div class="map_wrap">
                 <div class="map_title">
-                    <h2>2012 Asthma Emergecy Department Visits</h2>
+                    <h2>2012 Asthma Emergency Department Visits</h2>
                     <div class="social">
                         <a href="#" class="st-icon-facebook-alt st-icon-circle">Facebook</a>
                         <a href="#" class="st-icon-twitter st-icon-circle">Twitter</a>
