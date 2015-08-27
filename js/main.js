@@ -14,7 +14,7 @@ var CHCF = {
         MBox.init(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip); // jsonData via index.php
 
         // Top nav download button
-        $main_download = jQuery('.main_title_wrap a.download');
+        $main_download = jQuery('.navbar .download a');
         $main_download.on('click', function(){
 
             var data = jQuery.extend(jsonDataCounty, jsonDataZip);
