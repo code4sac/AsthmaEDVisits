@@ -8,10 +8,10 @@ var CHCF = {
         var $window = jQuery(window);
 
         // Subnav                
-        AffixNav.init($window.width());
+        // AffixNav.init($window.width());
 
         // MapBox map init
-        MBox.init(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip); // jsonData via index.php
+        MBox.init(jsonDataCounty, jsonDataZip, maxRate); // jsonData via index.php
 
         // Top nav download button
         $main_download = jQuery('.navbar .download a');
@@ -47,58 +47,9 @@ var CHCF = {
 ------------------------------------------------------------------------------*/
 
 var column_names = {
-    'number': {
-        '0': 'number_0_17',
-        '18': 'number_18_plus',
-        'all': 'number_all_ages',
-    },
-    'rate': {
-        '0': 'rate_0_17',
-        '18': 'rate_18_plus',
-        'all': 'rate_all_ages',
-    }
-}
-
-/*------------------------------------------------------------------------------
-    :: Sub Navigation
-------------------------------------------------------------------------------*/
-
-/* Floating navigation using Boostrap Affix.js
- * (included via Bootstrap.js)
-*/
-var AffixNav = {
-    init: function(win_width){
-        this.title_nav = jQuery('.main_title_nav');
-        this.win_width = win_width;
-        this.setAffix();
-        this.onAffixedBsAffix();
-        this.onAffixedTopBsAffix();
-    },
-    setAffix: function(){
-        this.setWidth();
-        this.title_nav.affix({
-            offset: {
-                top: 52,
-                bottom: 200,
-            }
-        });
-    },
-    setWidth: function(){
-        this.title_nav.css('width', this.win_width);
-    },
-    onAffixedBsAffix: function(){
-        this.title_nav.on('affixed.bs.affix', function(event){
-            jQuery('body').addClass('affixed');
-        });
-    },
-    onAffixedTopBsAffix: function(){
-        this.title_nav.on('affixed-top.bs.affix', function(event){
-            jQuery('body').removeClass('affixed');
-        });
-    },
-    onResize: function(win_width){
-        this.title_nav.css('width', win_width);
-    }
+    '0': 'rate_0',
+    '18': 'rate_18',
+    'all': 'rate_all',
 }
 
 /*------------------------------------------------------------------------------
@@ -480,14 +431,13 @@ var Histogram = {
         if( self.settings.values == 'rate' && self.settings.ages == '0' ){
 
             if( target_x < d ){ // all of bin is over target
-                return red_colors[4];
+                return colors[2];
             }
             if( d <= target_x && target_x < (d + bin_width) ){
-                console.log(d + ' ' + target_x + ' ' + bin_width);
-                return red_colors[2];
+                return colors[0];
             }
             if( d + bin_width < target_x ){
-                return green_colors[0];
+                return greenColors[0];
             }
         } else {
             return '#4682B4';
@@ -563,21 +513,7 @@ var Histogram = {
     xRangeMax: function(){
         var self = this;
 
-        switch( self.settings.map ){
-            case 'county':
-                var data = minMaxCounty;
-                break;
-            case 'zip':
-                var data = minMaxZip;
-                break;
-        }
-
-        var max = false;
-        if( self.settings.values == 'number' ){
-            max = data[self.settings.values][self.settings.ages]['max'];
-        } else {
-            max = data[self.settings.values]['max'];
-        }
+        var max = maxRate;
 
         // Round up to nearest multiple of 20
         if( max % 20 == 0 ){ max += 1;}
@@ -611,7 +547,7 @@ var Histogram = {
     },
     setDataProperty: function(){
         var self = this;
-        return column_names[self.settings.values][self.settings.ages];
+        return column_names[self.settings.ages];
     },
     set2020Target: function(){
         var self = this;

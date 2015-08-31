@@ -2,32 +2,32 @@
 $rootUrl = 'http://localhost/chcf/';
 // $rootUrl = 'http://chcf.idmstage.com/r1.2/';
 
-require_once('lib/get_data.php');
+// require_once('lib/get_data.php');
 
-/* Get data from APIs
-------------------------------------------------------------------------------*/
-// Get `county` data from API and format for JSON
-$featureDataCounty = get_api_feature_data('county');
-$jsonDataCounty = get_json_from_feature_data($featureDataCounty, 'county');
-$minMaxCounty = get_min_max_of_data($featureDataCounty);
+// /* Get data from APIs
+// ------------------------------------------------------------------------------*/
+// // Get `county` data from API and format for JSON
+// $featureDataCounty = get_api_feature_data('county');
+// $jsonDataCounty = get_json_from_feature_data($featureDataCounty, 'county');
+// $minMaxCounty = get_min_max_of_data($featureDataCounty);
 
-// Get `zip` data from API and format for JSON
-$featureDataZip = get_api_feature_data('zip');
-$jsonDataZip = get_json_from_feature_data($featureDataZip, 'zip');
-$minMaxZip = get_min_max_of_data($featureDataZip);
+// // Get `zip` data from API and format for JSON
+// $featureDataZip = get_api_feature_data('zip');
+// $jsonDataZip = get_json_from_feature_data($featureDataZip, 'zip');
+// $minMaxZip = get_min_max_of_data($featureDataZip);
 
 
-/* Get combo max for rates from both zip and county data
-------------------------------------------------------------------------------*/
-$real_rate_max = compare_rate_max($minMaxCounty, $minMaxZip);
+// /* Get combo max for rates from both zip and county data
+// ------------------------------------------------------------------------------*/
+// $real_rate_max = compare_rate_max($minMaxCounty, $minMaxZip);
 
-$minMaxCounty['rate']['max'] = $real_rate_max;
-$minMaxZip['rate']['max'] = $real_rate_max;
+// $minMaxCounty['rate']['max'] = $real_rate_max;
+// $minMaxZip['rate']['max'] = $real_rate_max;
 
-/* Make JSON data
-------------------------------------------------------------------------------*/
-$minMaxCounty = json_encode($minMaxCounty);
-$minMaxZip = json_encode($minMaxZip);
+// /* Make JSON data
+// ------------------------------------------------------------------------------*/
+// $minMaxCounty = json_encode($minMaxCounty);
+// $minMaxZip = json_encode($minMaxZip);
 
 ?>
 
@@ -129,12 +129,12 @@ $minMaxZip = json_encode($minMaxZip);
                     <div id="map_form">
                         <h3>Options</h3>
                         <form id="mapForm" method="GET">
-                            <select class="form-control" name="values">
-                                <option value="rate">
-                                    Rate Per 10,000
+                            <select class="form-control" name="map">
+                                <option value="county">
+                                    County Map
                                 </option>
-                                <option value="number">
-                                    Number of Visits
+                                <option value="zip">
+                                    Zip Code Map
                                 </option>
                             </select>
                             <select class="form-control" name="ages">
@@ -146,14 +146,6 @@ $minMaxZip = json_encode($minMaxZip);
                                 </option>
                                 <option value="all">
                                     All Ages
-                                </option>
-                            </select>
-                            <select class="form-control" name="map">
-                                <option value="county">
-                                    County Map
-                                </option>
-                                <option value="zip">
-                                    Zip Code Map
                                 </option>
                             </select>
                             <!-- <button class="btn btn-primary btn-block">Updated Map</button> -->
@@ -331,6 +323,9 @@ $minMaxZip = json_encode($minMaxZip);
 
 <script src="js/resources/d3.min.js"></script>
 <script type="text/javascript" src="js/ca-counties.js"></script>
+<script type="text/javascript" src="data/emergency_department_rates__county.js"></script>
+<script type="text/javascript" src="data/emergency_department_rates__zip.js"></script>
+
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/mapbox_script.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
@@ -339,10 +334,7 @@ $minMaxZip = json_encode($minMaxZip);
 
     var rootUrl = <?php echo '"' . $rootUrl . '"'; ?>;
 
-    var jsonDataCounty = <?php echo $jsonDataCounty; ?>;
-    var jsonDataZip = <?php echo $jsonDataZip; ?>;
-    var minMaxCounty = <?php echo $minMaxCounty; ?>;
-    var minMaxZip = <?php echo $minMaxZip; ?>;
+    var maxRate = 155.5;
 
     jQuery(document).ready(function(){
         CHCF.dataMapInit();

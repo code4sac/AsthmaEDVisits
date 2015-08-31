@@ -3,15 +3,12 @@
 ------------------------------------------------------------------------------*/
 
 // Map colors light to dark
-var red_colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
-// Map colors for on target rates light to dark
-// var green_colors = ['#006d2c', '#31a354', '#74c476'];
-// var green_colors = ['#74c476', '#31a354', '#006d2c'];
-var green_colors = ['#31a354', '#74c476'];
 
 // Map
 var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
-var colors2022 = ['#31a354', '#74c476', '#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
+var greenColors = ['#31a354', '#74c476'];
+var grayColor = '#cccccc';
+
 
 /*------------------------------------------------------------------------------
     :: formatter
@@ -39,21 +36,17 @@ function format_number(num){
 
 var csv_labels = [
     'Geography',
-    'Number Ages 0-17',
-    'Number Ages 18+',
-    'Number All Ages',
+    'Year',
     'Rate Age 0-17',
     'Rate 18+',
     'Rate All Ages',
 ]
 var csv_keys = [
     // 'geography', // skip geography since it is the object key, on a value in within
-    'number_0_17',
-    'number_18_plus',
-    'number_all_ages',
-    'rate_0_17',
-    'rate_18_plus',
-    'rate_all_ages',
+    'year',
+    'rate_0',
+    'rate_18',
+    'rate_all',
 ]
 
 /*  Take a set of jsonData and return a CSV string suitable for to 
