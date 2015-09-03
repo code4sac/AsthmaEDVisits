@@ -7,11 +7,11 @@ var CHCF = {
 
         var $window = jQuery(window);
 
-        // Subnav                
-        // AffixNav.init($window.width());
-
         // MapBox map init
         MBox.init(jsonDataCounty, jsonDataZip, maxRate); // jsonData via index.php
+
+        // Slides init
+        slideShow(jsonDataCounty, jsonDataZip, maxRate);
 
         // Top nav download button
         $main_download = jQuery('.navbar .download a');
@@ -37,7 +37,6 @@ var CHCF = {
 
         $window.resize(function(){
             var win_width = jQuery(window).width();
-            AffixNav.onResize(win_width);
         });
     }
 }

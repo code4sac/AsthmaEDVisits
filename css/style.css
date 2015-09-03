@@ -130,6 +130,7 @@ p {
 
 section {
     padding: 6.5em 0;
+    position: relative;
 }
 
 section h1,
@@ -151,10 +152,9 @@ section h2 span {
     letter-spacing: 1px;
 }
 .named_anchor {
-    position: relative;
-    top: -10em;
-    width: 1em;
-    height: 1em;
+    position: absolute;
+    top: 0;
+    text-indent: -9999px;
 }
 
 @media screen and (max-width: 767px){
@@ -225,10 +225,137 @@ section h2 span {
 
 
 
-/*--------------- Overview ---------------*/
+/*------------------------------------------------------------------------------
+    :: Overview
+------------------------------------------------------------------------------*/
+
+.overview {
+    background: #E6E6E6;
+    border-top: 1px solid #C7C7C7;
+    border-bottom: 1px solid #C7C7C7;
+}
+
+.slides .slide {
+    padding: 1px;
+    background: #FFF;
+    height: 62em;
+    padding: 4.1em 4.6em 4.6em;
+}
+.slide_wrap {
+    position: relative;
+}
+
+.slides {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.slide_count {
+    position: relative;
+    top: 8px;
+    left: -6px;
+    color: #606060;
+}
+
+/*--------------- Bxslider ---------------*/
+.bx-wrapper .bx-viewport {
+    border: 0;
+    box-shadow: 0 0 0;
+    border: 1px solid #C7C7C7;
+}
+
+/*--------------- .slide_nav ---------------*/
+.slide_nav a {
+    background: #3DB8FF;
+    color: #fff;
+    border-radius: 10em;
+    font-size: 2em;
+    display: block;
+    height: 2em;
+    width: 2em;
+    text-align: center;
+    line-height: 1em;
+    padding-top: 0.3em;
+}
+.slide_nav a span {
+    font-size: 1.2em;
+    line-height: 1em;
+}
+
+.slide_nav a.deactivated,
+.slide_nav a.deactivated:hover,
+.slide_nav a.deactivated:focus {
+    background: #D9D9D9;
+}
+
+.slide_nav .prev,
+.slide_nav .next {
+    position: absolute;
+    top: 48%;
+}
+.slide_nav .prev {
+    left: -6em;
+}
+.slide_nav .next {
+    right: -6em;
+}
+
+/*------------------------------------------------------------------------------
+    :: Slides
+------------------------------------------------------------------------------*/
+
+.slide h3 {
+    font-size: 2.8em;
+    font-weight: 300;
+    line-height: 1.3em;
+}
+.slide .text {
+    margin: 6em 0 0;
+}
+
+/*--------------- .start ---------------*/
+
+.slide.start h3 {
+    font-size: 5.8em;
+    font-weight: 700;
+    line-height: 1em;
+    padding: 0.375em 0 1.775em;
+}
+.slide.start h3 span {
+    font-size: 0.31em;
+    display: block;
+    letter-spacing: 1px;
+    margin: 0;
+    padding: 0 0 0.4em;
+    line-height: 1em;
+    text-transform: uppercase;
+}
+.slide.start p {
+    font-size: 2.8em;
+    line-height: 1.5em;
+    font-weight: 300;
+}
+.slide.start a {
+    color: #3DB8FF;
+    font-size: 2.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 2em 0 0 17.4em;
+    display: block;
+}
+.slide.start a:hover,
+.slide.start a:focus {
+    text-decoration: none;
+    color: #333;
+}
+
+
+/*--------------- .common ---------------*/
 
 .number_box {
     background: #E6E6E6;
+    margin-top: 6em;
 }
 .number_box h3 {
     margin: 0;
@@ -243,18 +370,31 @@ section h2 span {
 .number_box ul li {
     margin-bottom: 1.4em;
 }
-.number_box .text {
-    font-size: 1.2em;
-    /*text-transform: uppercase;*/
+.number_box .number_text {
+    font-size: 1.5em;
+    font-weight: 700;
 }
 .number_box .number {
     font-weight: 700;
-    font-size: 3.2em;
+    font-size: 5.3em;
     line-height: 1em;
     padding-bottom: 0.075em;
 }
 .number_box .number span {
     font-size: 0.5em;
+}
+
+/*--------------- .geography ---------------*/
+
+.histogram {
+    position: absolute;
+    top: 30em;
+    left: -9999px;
+    opacity: 0;
+}
+.histogram.over_slides {
+    top: 30em;
+    left: 4.6em;
 }
 
 /*------------------------------------------------------------------------------
@@ -387,10 +527,6 @@ section h2 span {
     :: Histogram
 ------------------------------------------------------------------------------*/
 
-.histogram {
-    margin-bottom: 5em;
-}
-
 #histogram_form h3 {
     font-weight: 400;
     font-size: 1.4em;
@@ -403,40 +539,45 @@ section h2 span {
 /*--------------- d3 Histogram Graph ---------------*/
 
 
-#histogram_svg .bar rect {
+.histogram .bar rect {
   /*fill: #009245;*/
   shape-rendering: crispEdges;
 }
 
-#histogram_svg .bar rect.above_target {
+.histogram .bar rect.above_target {
   /*fill: #ED1C24;*/
   shape-rendering: crispEdges;
 }
 
-#histogram_svg .bar text {
+.histogram .bar text {
   fill: #666;
 }
 
-#histogram_svg .axis path,
-#histogram_svg .axis line {
+.histogram .axis path,
+.histogram .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
 
-#histogram_svg .target {
+.histogram .target {
     opacity: 0;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
-#histogram_svg .target.show {
+.histogram .target.show {
     opacity: 1;
 }
-#histogram_svg .target text {
+.histogram .target text {
     font-size: 16px;
     fill: #666666;
+}
+
+.histogram .label {
+    font-size: 14px;
+    font-weight: 700;
 }
 
 /*--------------- Sidebar stats ---------------*/

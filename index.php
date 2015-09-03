@@ -2,38 +2,17 @@
 $rootUrl = 'http://localhost/chcf/';
 // $rootUrl = 'http://chcf.idmstage.com/r1.2/';
 
-// require_once('lib/get_data.php');
-
-// /* Get data from APIs
-// ------------------------------------------------------------------------------*/
-// // Get `county` data from API and format for JSON
-// $featureDataCounty = get_api_feature_data('county');
-// $jsonDataCounty = get_json_from_feature_data($featureDataCounty, 'county');
-// $minMaxCounty = get_min_max_of_data($featureDataCounty);
-
-// // Get `zip` data from API and format for JSON
-// $featureDataZip = get_api_feature_data('zip');
-// $jsonDataZip = get_json_from_feature_data($featureDataZip, 'zip');
-// $minMaxZip = get_min_max_of_data($featureDataZip);
-
-
-// /* Get combo max for rates from both zip and county data
-// ------------------------------------------------------------------------------*/
-// $real_rate_max = compare_rate_max($minMaxCounty, $minMaxZip);
-
-// $minMaxCounty['rate']['max'] = $real_rate_max;
-// $minMaxZip['rate']['max'] = $real_rate_max;
-
-// /* Make JSON data
-// ------------------------------------------------------------------------------*/
-// $minMaxCounty = json_encode($minMaxCounty);
-// $minMaxZip = json_encode($minMaxZip);
-
+// Set `$slide` for social share and jump to slide
+// - slide value used in `head.php`
+if( isset($_GET['slide']) ){
+    $slide = $_GET['slide'];
+} else {
+    $slide = 0;
+}
 ?>
 
 
-<?php require_once('lib/head.php'); ?>
-
+<?php require_once('includes/head.php'); ?>
 
 
 <section class="intro">
@@ -65,44 +44,19 @@ $rootUrl = 'http://localhost/chcf/';
 
 
 <!-- Overview -->
-<a class="named_anchor" name="overview">&nbsp;</a>
 <section class="overview">
+<a class="named_anchor" name="overview">&nbsp;</a>
 
-    <h2><span>Overview</span></h2>
-    
-    <div class="row">
-        <div class="col-sm-8 col-sm-offset-1">
-            <p class="">Asthma is one of the most common chronic diseases and has been recognized as a growing public health concern. The effects of asthma include missed school and work days, disruption of sleep and daily activities, urgent medical visits for asthma exacerbations, and even death. Asthma affects not only those with the disease but also their family members and friends, as well as schools and businesses. There is no cure for asthma, but symptoms can be controlled with access to medical care, appropriate medications, proper self-management, and trigger reduction. When asthma is controlled, people can lead normal lives and achieve their goals.</p>
-            <p>Learn more about asthma in California, it's burden on our state and plans for reducing its impact at <a href="http://www.californiabreathing.org" target="_blank">CaliforniaBreathing.org</a>.</p>
-        </div>
-        <div class="col-sm-3">
-            <div class="number_box">
-                <h3>2012 ED Visits</h3>
-                <ul>
-                    <li>
-                        <div class="number">145,360</div>
-                        <div class="text">Total ED Visits</div>
-                    </li>
-                    <li>
-                        <div class="number">74.02</div>
-                        <div class="text">Average Rate Per 10,000,<br />Age 0-17</div>
-                    </li>
-                    <li>
-                        <div class="number">28</div>
-                        <div class="text">2022 Target Rate Per 10,000,<br />Ages 0-17</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php require_once('includes/section_overview.php') ?>
+
 </section>
 <!-- .section_context -->
 
 
 
 <!-- Map -->
-<a class="named_anchor" name="section_map">&nbsp;</a>
 <section class="map">
+<a class="named_anchor" name="section_map">&nbsp;</a>
 
     <div class="container">
         <div class="row">
@@ -173,8 +127,8 @@ $rootUrl = 'http://localhost/chcf/';
 
 
 <!-- Context -->
-<a class="named_anchor" name="section_context">&nbsp;</a>
 <section class="container section_context">
+<a class="named_anchor" name="section_context">&nbsp;</a>
 
     <h2><span>Context</span></h2>
     
@@ -257,63 +211,7 @@ $rootUrl = 'http://localhost/chcf/';
 <!-- .section_context -->
 
 
-
-
-<!-- Resources -->
-<a class="named_anchor" name="resources">&nbsp;</a>
-<section class="resources">
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h2><span>Resources</span> Where Do I Go From Here?</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4">
-                <h3>Asthma Treatment</h3>
-                <p><strong>Did you know</strong>: A written asthma action plan from a health care provider can help you manage your symptoms and reduce the risk of emergency department visits or hospitalization by <strong>XX%</strong>, but only about <strong>40%</strong> of people experiencing asthma have ever received one.<p>
-                <p>Experiencing asthma symptoms? <a href="#">Contact your health care provider</a>.<p>
-                <p>Uninsured? <a href="#">Get signed up</a>.<p>
-            </div>
-            <div class="col-sm-4">
-                <h3>Plans and Solutions</h3>
-                <p><strong>Did you know</strong>: Asthma causes <strong>11.8 million</strong> missed work days and <strong>1.2 million</strong> missed school and daycare days in California annually, and asthma hospitalizations cost over <strong>$1 billion</strong> in California per year.<p>
-                <p>Want to know what California’s doing about it? <a href="#">Check out the state’s Strategic Plan for Asthma</a>.<p>
-                <p>Want to talk to an expert? <a href="#">Contact the California Breathing team</a>.<p>
-            </div>
-            <div class="col-sm-4">
-                <h3>Data Sets</h3>
-                <p><strong>Did you know</strong>: The CHHS Open Data Portal contains much of the data used for this site, along with a host of other datasets covering medical facility performance, other public health indicators, and social services delivery.<p>
-                <p>Want to access the state’s data? <a href="#">Check it out</a>.<p>
-                <p>Need other asthma data? Check out <a href="#">AskCHIS</a>, <a href="#">BRFSS</a>, the <a href="#">US Census</a>, and <a href="#">California Breathing</a>.<p>
-            </div>
-        </div>
-    </div>
-
-</section>
-<!-- .section_context -->
-
-
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="copyright">Asthma Emergency Department Visits</div>
-            </div>
-        </div>
-    </div>
-</footer>
-
-
-
-
-
-
-
-
-
-
+<?php require_once('includes/section_resources_footer.php'); ?>
 
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -322,12 +220,14 @@ $rootUrl = 'http://localhost/chcf/';
 <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
 
 <script src="js/resources/d3.min.js"></script>
+<script src="js/resources/bxslider/jquery.bxslider.min.js"></script>
 <script type="text/javascript" src="js/ca-counties.js"></script>
 <script type="text/javascript" src="data/emergency_department_rates__county.js"></script>
 <script type="text/javascript" src="data/emergency_department_rates__zip.js"></script>
 
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/mapbox_script.js"></script>
+<script type="text/javascript" src="js/slides.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
 <script type="text/javascript">
@@ -338,7 +238,7 @@ $rootUrl = 'http://localhost/chcf/';
 
     jQuery(document).ready(function(){
         CHCF.dataMapInit();
-        Histogram.init();
+        // Histogram.init();
     });
 
 </script>

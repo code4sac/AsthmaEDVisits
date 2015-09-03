@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>CHCF Round 3.2</title>
+    <title>Astham Emergency Department Visits | California Health Care Foundation</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <!-- Bootstrap 3 / Google Fonts -->
@@ -12,7 +12,11 @@
     <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css" rel="stylesheet" />
     <!-- CHCF -->
     <link rel="stylesheet" href="css/stackicons/css/stackicons-social-minimal.min.css">
+    <link rel="stylesheet" href="js/resources/bxslider/jquery.bxslider.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <?php require_once('includes/social_meta.php') ?>
+
 </head>
 
 <body>
