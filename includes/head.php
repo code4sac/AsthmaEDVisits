@@ -21,6 +21,8 @@
 
 <body>
 
+<?php echo $fb_image ?>
+
 <nav class="navbar nav-fixed">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->

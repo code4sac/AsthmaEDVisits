@@ -45,6 +45,7 @@ var Slides = {
         self.initControls();
 
         // Draw histogram on first geography slide
+        // self.initHistogram('county', 'rate_18');
         self.initHistogram('county', 'rate_18');
 
         return self;
@@ -140,6 +141,12 @@ var Slides = {
             .domain([0, d3.max(bins, function(d) { return d.count; })])
             .range([height, 0]);
 
+
+
+        var bins = d3.layout.histogram()
+            .bins(x.ticks(16))
+            (values);
+
         /* SVG Graphic
         ----------------------------------------------------------------------*/
 
@@ -213,6 +220,9 @@ var Slides = {
             .attr('transform', 'rotate(-90)')
             .style('text-anchor', 'middle')
             .text('Count')
+
+        /* 2022 Target line
+        ----------------------------------------------------------------------*/
 
         // var target_line_offset = 40; // pushes line over within target g
         // var target = svg.append('g')
