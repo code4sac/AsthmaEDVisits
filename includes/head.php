@@ -29,8 +29,8 @@
         </div>
 
         <div class="social">
-            <a href="#" class="st-icon-facebook-alt st-icon-circle">Facebook</a>
-            <a href="#" class="st-icon-twitter st-icon-circle">Twitter</a>
+            <a href="http://facebook.com/sharer.php?u=<?php echo urlencode($rootUrl) ?>&amp;t=<?php echo urlencode('Asthma Emergency Department Visits in California') ?>" target="_blank" class="st-icon-facebook-alt st-icon-circle">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($rootUrl) ?>&amp;text=<?php echo urlencode('Asthma Emergency Department Visits in California') ?>&amp;via=<?php echo urldecode('CAHealthData') ?>" class="st-icon-twitter st-icon-circle" target="_blank">Twitter</a>
         </div>
 
         <div class="download">

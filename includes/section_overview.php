@@ -17,12 +17,10 @@
                 </div>
 
                 <div class="slide_count">
-                    <span class="current">1</span> of <span class="max">12</span>
+                    <span class="current">1</span> of <span class="max">11</span>
                 </div>
 
                 <div class="histogram"></div>
-
-                <div class="small_mapbox"></div>
 
             </div>
         </div>

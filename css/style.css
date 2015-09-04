@@ -305,6 +305,21 @@ section h2 span {
     :: Slides
 ------------------------------------------------------------------------------*/
 
+.slide {
+    position: absolute;
+    opacity: 0;
+    z-index: 0;
+}
+.slide.start {
+    position: static;
+    opacity: 1;
+    z-index: 10;
+}
+.bx-wrapper .slide {
+    opacity: 1;
+    z-index: 50;
+}
+
 .slide h3 {
     font-size: 2.8em;
     font-weight: 300;
@@ -312,6 +327,23 @@ section h2 span {
 }
 .slide .text {
     margin: 6em 0 0;
+}
+
+.slide_social {
+    position: absolute;
+    top: 1em;
+    right: 1.2em;
+    font-size: 1.2em;
+    word-spacing: 0.3em;
+    width: 5.4em;
+}
+
+.slide_social [class^="st-icon-"]:before {
+    color: #CCC;
+}
+.slide_social [class^="st-icon-"]:hover:before,
+.slide_social [class^="st-icon-"]:focus:before {
+    color: #3DB8FF;
 }
 
 /*--------------- .start ---------------*/
@@ -336,7 +368,7 @@ section h2 span {
     line-height: 1.5em;
     font-weight: 300;
 }
-.slide.start a {
+.slide.start .continue {
     color: #3DB8FF;
     font-size: 2.1em;
     font-weight: 700;
@@ -344,12 +376,17 @@ section h2 span {
     margin: 2em 0 0 17.4em;
     display: block;
 }
-.slide.start a:hover,
-.slide.start a:focus {
+.slide.start .continue:hover,
+.slide.start .continue:focus {
     text-decoration: none;
     color: #333;
 }
 
+/*--------------- .measured ---------------*/
+
+.slide.measured img {
+    margin-top: 9em;
+}
 
 /*--------------- .common ---------------*/
 
@@ -384,18 +421,41 @@ section h2 span {
     font-size: 0.5em;
 }
 
-/*--------------- .geography ---------------*/
+/*--------------- .geography ------------*/
+
+.geography img {
+    height: auto;
+    margin-top: 4em;
+    border: 1px solid #bbb;
+}
+
+.histogram {
+    opacity: 0;
+}
+.histogram.over_slides {
+    opacity: 1;
+    z-index: 100;
+}
 
 .histogram {
     position: absolute;
     top: 30em;
-    left: -9999px;
-    opacity: 0;
-}
-.histogram.over_slides {
-    top: 30em;
     left: 4.6em;
+    z-index: 0;
 }
+
+/*--------------- #small_mapbox ---------------*/
+
+/*#small_mapbox {
+    width: 40%;
+    height: 60%;
+    position: absolute !important;
+    z-index: 0;
+    top: 11em;
+    right: 8%;
+    border: 1px solid #ccc;
+}
+*/
 
 /*------------------------------------------------------------------------------
     :: Map

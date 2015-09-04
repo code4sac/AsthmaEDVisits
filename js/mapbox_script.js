@@ -64,12 +64,18 @@ var MBox = {
         // self.intervals = self.buildColorIntervals();
 
         // Fire it up!
-        self.onReady();
+        var maps = self.onReady();
+
+        return maps;
     },
     onReady: function(){
         var self = this;
 
         L.mapbox.accessToken = 'pk.eyJ1IjoibXJzaG9yZXMiLCJhIjoiZDQwYjc2ZjJlOTM1YTlhMjI4N2JlNDg2ODI0NTlkMTcifQ.rlAJW20fwjEB8H9ptH1bNA';
+
+
+        /* Create Maps
+        ----------------------------------------------------------------------*/
 
         var map = L.mapbox.map('map', self.base_tile_type, {
                                 doubleClickZoom: false, // Disable default double-click behavior
@@ -80,9 +86,6 @@ var MBox = {
                                 // Zoom exactly to each double-clicked point
                                 map.setView(e.latlng, map.getZoom() + 1);
                             });
-
-        // MapBox interaction settings
-        // map.scrollWheelZoom.disable();
 
         jsonData = self.getData();
 
@@ -110,7 +113,6 @@ var MBox = {
         }
 
         drawLegendByDataValue();
-
 
         /* Draw shapes, legend, and add interactivity
         ----------------------------------------------------------------------*/
@@ -144,14 +146,14 @@ var MBox = {
         // Update if the age filter changes
         $mapForm.find('select[name="ages"]').on('change', function(event){
             self.ages = jQuery(this).val();
-            self.updateHash();
+            self.updateHashAndSocial();
             updateMapAndLegend();
         });
 
         // Update if the map filter changes
         $mapForm.find('select[name="map"]').on('change', function(event){
             self.map = jQuery(this).val();
-            self.updateHash();
+            self.updateHashAndSocial();
             updateMapAndLegend();
             toggleLayers(self.map);
         });
@@ -190,6 +192,8 @@ var MBox = {
             // Update data_property
             self.data_property = column_names[self.ages];
             // self.intervals = self.buildColorIntervals();
+
+            jsonData = self.getData();
 
             if( self.map == 'county' ){
                 drawShapesByDataValue(countyLayer, 'county');
@@ -247,15 +251,16 @@ var MBox = {
             // Correct for null values
             if( d == "" || d == null ){ return grayColor; }
 
+            // Divide by interval_width for id of color bin
             d = Math.floor( d / self.interval_width );
 
-            if( d < self.data_max ){
+            if( d < 8 ){
                 return colors[d];
             } else {
-                return colors[colors.length]; // last color
+                // All numbers beyond the last bin go in the last bin
+                return colors[colors.length - 1]; // last color
             }
         }
-
 
         /* Map legend
         ------------------------------------------------------------*/
@@ -423,38 +428,6 @@ var MBox = {
                 map.setView(e.latlng, map.getZoom() + 1);
             }
         }
-
-        /* Fitler features
-        ------------------------------------------------------------*/
-
-        function filterFeatures(){
-            console.log('filterFeatures');
-        }
-
-
-        /* Search Filter
-        ------------------------------------------------------------*/
-
-        // Initialize the geocoder control and add it to the map.
-        var geocoderControl = L.mapbox.geocoderControl('mapbox.places', {
-            autocomplete: true
-        });
-        geocoderControl.addTo(map);
-
-        // Listen for the `found` result and display the first result
-        // in the output container. For all available events, see
-        // https://www.mapbox.com/mapbox.js/api/v2.2.1/l-mapbox-geocodercontrol/#section-geocodercontrol-on
-        geocoderControl.on('found', function(res){
-            // output.innerHTML = JSON.stringify(res.results.features[0]);
-        }).on('select', function(res){
-            console.log(res);
-        });
-
-
-        /* Add Attribution
-        ------------------------------------------------------------*/
-
-        // map.attributionControl.addAttribution('' + '<a href="#"></a>');
     },
     getHash: function(){
         var raw = window.location.hash;
@@ -472,13 +445,14 @@ var MBox = {
         }
         return hashValues;
     },
-    updateHash: function(){
+    updateHashAndSocial: function(){
         var self = this;
         var new_hash = '#ages=' + self.ages + '&map=' + self.map;
         // Update has without scrolling the window
         var scrollmem = jQuery(window).scrollTop();
         window.location.hash = new_hash;
         jQuery(window).scrollTop(scrollmem);
+        // Update map social URLs
     },
     getData: function(){
         var self = this;

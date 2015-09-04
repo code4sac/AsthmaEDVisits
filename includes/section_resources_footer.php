@@ -1,6 +1,6 @@
 <!-- Resources -->
 <section class="resources">
-<a class="named_anchor" name="resources">&nbsp;</a>
+<a class="named_anchor" name="section_resources">&nbsp;</a>
 
     <div class="container">
         <div class="row">
@@ -11,21 +11,22 @@
         <div class="row">
             <div class="col-sm-4">
                 <h3>Asthma Treatment</h3>
-                <p><strong>Did you know</strong>: A written asthma action plan from a health care provider can help you manage your symptoms and reduce the risk of emergency department visits or hospitalization by <strong>XX%</strong>, but only about <strong>40%</strong> of people experiencing asthma have ever received one.<p>
-                <p>Experiencing asthma symptoms? <a href="#">Contact your health care provider</a>.<p>
-                <p>Uninsured? <a href="#">Get signed up</a>.<p>
+                <p><strong>Did you know</strong>: Asthma patients who spend as little as 30 minutes with a health care professional to develop a personalized self-management plan have better disease control, but only about <strong>40%</strong> of people experiencing asthma have ever received a written plan.<p>
+                <p>Experiencing asthma symptoms? <em>Contact your health care provider</em>.<p>
+                <p>Uninsured? <a href="http://www.coveredca.com/" target="_blank">Get signed up</a>.<p>
+                <p>Want to learn more? Check out asthma info from the <a href="http://www.cdc.gov/asthma/" target="_blank">CDC</a>, <a href="http://www.lung.org/lung-disease/asthma/" target="_blank">American Lung Association</a>, and the <a href="https://www.aaaai.org/conditions-and-treatments/asthma.aspx" target="_blank">American Academy of Allergy Asthma &amp; Immunology</a></p>
             </div>
             <div class="col-sm-4">
                 <h3>Plans and Solutions</h3>
-                <p><strong>Did you know</strong>: Asthma causes <strong>11.8 million</strong> missed work days and <strong>1.2 million</strong> missed school and daycare days in California annually, and asthma hospitalizations cost over <strong>$1 billion</strong> in California per year.<p>
-                <p>Want to know what California’s doing about it? <a href="#">Check out the state’s Strategic Plan for Asthma</a>.<p>
-                <p>Want to talk to an expert? <a href="#">Contact the California Breathing team</a>.<p>
+                <p><strong>Did you know</strong>: Asthma causes <strong>11.8 million</strong> missed work days and <strong>1.2 million</strong> missed school and daycare days in California annually, and direct and indirect asthma costs total <strong>$11.3 billion</strong> in California per year.<p>
+                <p>Want to know what California’s doing about it? <a href="http://www.californiabreathing.org/images/SPAC2014_7-28-15APR.PDF" target="_blank">Check out the state’s Strategic Plan for Asthma</a>.<p>
+                <p>Want to talk to an expert? <a href="http://californiabreathing.org/about-us/contact-us" title="CaliforniaBreathing.org Contact" target="_blank">Contact the California Breathing team</a>.<p>
             </div>
             <div class="col-sm-4">
                 <h3>Data Sets</h3>
                 <p><strong>Did you know</strong>: The CHHS Open Data Portal contains much of the data used for this site, along with a host of other datasets covering medical facility performance, other public health indicators, and social services delivery.<p>
-                <p>Want to access the state’s data? <a href="#">Check it out</a>.<p>
-                <p>Need other asthma data? Check out <a href="#">AskCHIS</a>, <a href="#">BRFSS</a>, the <a href="#">US Census</a>, and <a href="#">California Breathing</a>.<p>
+                <p>Want to access the state’s data? <a href="https://chhs.data.ca.gov/" target="_blank">Check it out</a>.<p>
+                <p>Need other asthma data? Check out <a href="http://ask.chis.ucla.edu/" target="_blank">AskCHIS</a>, <a href="http://www.cdc.gov/brfss/" target="_blank">BRFSS</a>, the <a href="http://www.cdc.gov/asthma/asthmadata.htm" target="_blank">CDC</a>, <a href="http://californiabreathing.org" target="_blank">California Breathing</a>, and the <a href="http://www.ehib.org/page.jsp?page_key=24" target="_blank">California Environmental Health Tracking Program</a>.<p>
             </div>
         </div>
     </div>
