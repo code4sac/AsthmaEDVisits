@@ -141,12 +141,6 @@ var Slides = {
             .domain([0, d3.max(bins, function(d) { return d.count; })])
             .range([height, 0]);
 
-
-
-        var bins = d3.layout.histogram()
-            .bins(x.ticks(16))
-            (values);
-
         /* SVG Graphic
         ----------------------------------------------------------------------*/
 
