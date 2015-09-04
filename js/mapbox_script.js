@@ -445,15 +445,9 @@ var MBox = {
     updateHashAndSocial: function(){
         var self = this;
 
-        // var new_hash = '#ages=' + self.ages + '&map=' + self.map;
-        // // Update has without scrolling the window
-        // var scrollmem = jQuery(window).scrollTop();
-        // window.location.hash = new_hash;
-        // jQuery(window).scrollTop(scrollmem);
-        // Update map social URLs
-
         var new_social = '?map=' + self.map + self.ages;
 
+        // Update has without scrolling the window
         window.history.replaceState('state_map', 'Asthma ED Visits', new_social);
 
         // Update map social links
@@ -462,7 +456,6 @@ var MBox = {
             var href = $this.attr('href');
 
             if( $this.hasClass('st-icon-twitter') ){
-                console.log(href);
                 var spliter = 'url='; // twitter intent url parameter
             } else {
                 var spliter = 'u='; // facebook url parameter
