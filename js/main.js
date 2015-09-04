@@ -8,7 +8,7 @@ var CHCF = {
         var $window = jQuery(window);
 
         // MapBox map init
-        MBox.init(jsonDataCounty, jsonDataZip, maxRate); // jsonData via index.php
+        MBox.init(jsonDataCounty, jsonDataZip, maxRate, hashValues); // jsonData via index.php
 
         // Slides init
         slideShow(jsonDataCounty, jsonDataZip, maxRate, GET_slide);

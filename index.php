@@ -2,14 +2,59 @@
 $rootUrl = 'http://localhost/chcf/';
 // $rootUrl = 'http://chcf.idmstage.com/r3.2/';
 
-// Set `$slide` for social share and jump to slide
-// - slide value used in `head.php`
+/* Set `$slide` for social share and jump to slide
+------------------------------------------------------------------------------*/
+// - slide value used in `head.php` */
+
 if( isset($_GET['slide']) ){
     $slide = $_GET['slide'];
 } else {
     $slide = 0;
 }
+
+/* GET for map settings
+------------------------------------------------------------------------------*/
+
+$map_hash = 'county0';
+if( isset( $_GET['map']) ){
+    $map_hash = $_GET['map'];
+}
+
+switch( $map_hash ){
+    case 'county0':
+        $age_setting = '0';
+        $map_setting = 'county';
+        break;
+    case 'county18':
+        $age_setting = '18';
+        $map_setting = 'county';
+        break;
+    case 'countyall':
+        $age_setting = 'all';
+        $map_setting = 'county';
+        break;
+    case 'zip0':
+        $age_setting = '0';
+        $map_setting = 'zip';
+        break;
+    case 'zip18':
+        $age_setting = '18';
+        $map_setting = 'zip';
+        break;
+    case 'zipall':
+        $age_setting = 'all';
+        $map_setting = 'zip';
+        break;
+    default:
+        $map_hash = 'county0';
+        $age_setting = 0;
+        $map_setting = 'county';
+        break;
+}
+
 ?>
+
+
 
 
 <?php require_once('includes/head.php'); ?>
@@ -88,6 +133,12 @@ if( isset($_GET['slide']) ){
 
     var maxRate = 155.5;
     var GET_slide = <?php echo $slide ?>;
+
+    var hashValues = {
+        age: '<?php echo $age_setting ?>',
+        map: '<?php echo $map_setting ?>'
+    }
+
 
     jQuery(document).ready(function(){
         CHCF.dataMapInit();

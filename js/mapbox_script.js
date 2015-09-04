@@ -35,16 +35,18 @@ var emptyStyle = {
 ------------------------------------------------------------------------------*/
 
 var MBox = {
-    init: function(jsonDataCounty, jsonDataZip, maxRate){
+    init: function(jsonDataCounty, jsonDataZip, maxRate, hashValues){
         var self = this;
 
         // Set base tile map
         self.base_tile_type = 'mapbox.light';
 
         // Get settings from window hash if exist
-        var hash = self.getHash();
-        self.ages = hash.ages;
-        self.map = hash.map;
+        self.hashValues = hashValues;
+
+        // self.hashValues = self.getHash();
+        self.ages = self.hashValues.age;
+        self.map = self.hashValues.map;
 
         var $mapForm = jQuery('#mapForm');
         $mapForm.find('select[name="ages"]').val(self.ages)
@@ -59,9 +61,6 @@ var MBox = {
         self.data_property = column_names[self.ages];
         self.data_max = maxRate;
         self.interval_width = self.setIntervalWidth();
-
-        // Build color intervals
-        // self.intervals = self.buildColorIntervals();
 
         // Fire it up!
         var maps = self.onReady();
@@ -430,29 +429,51 @@ var MBox = {
         }
     },
     getHash: function(){
+        var self = this;
+
         var raw = window.location.hash;
-        var hashValues = {
-            ages: '0',
-            map: 'county'
+        if( raw.length ){
+            raw = raw.replace('#', '');
+            raw = raw.split('&');
+            for( var i = 0; i < raw.length; i++ ){
+                var split = raw[i].split('='); // values=number --> ['values', 'number']
+                self.hashValues[split[0]] = split[1]; // hasValues['values'] = 'number'
+            }
         }
-
-        raw = raw.replace('#', '');
-        raw = raw.split('&');
-
-        for( var i = 0; i < raw.length; i++ ){
-            var split = raw[i].split('='); // values=number --> ['values', 'number']
-            hashValues[split[0]] = split[1]; // hasValues['values'] = 'number'
-        }
-        return hashValues;
+        // No return statement, sets hashValues in `for` loop above
     },
     updateHashAndSocial: function(){
         var self = this;
-        var new_hash = '#ages=' + self.ages + '&map=' + self.map;
-        // Update has without scrolling the window
-        var scrollmem = jQuery(window).scrollTop();
-        window.location.hash = new_hash;
-        jQuery(window).scrollTop(scrollmem);
+
+        // var new_hash = '#ages=' + self.ages + '&map=' + self.map;
+        // // Update has without scrolling the window
+        // var scrollmem = jQuery(window).scrollTop();
+        // window.location.hash = new_hash;
+        // jQuery(window).scrollTop(scrollmem);
         // Update map social URLs
+
+        var new_social = '?map=' + self.map + self.ages;
+
+        window.history.replaceState('state_map', 'Asthma ED Visits', new_social);
+
+        // Update map social links
+        jQuery('.map_wrap .social a').each(function(){
+            $this = jQuery(this);
+            var href = $this.attr('href');
+
+            if( $this.hasClass('st-icon-twitter') ){
+                console.log(href);
+                var spliter = 'url='; // twitter intent url parameter
+            } else {
+                var spliter = 'u='; // facebook url parameter
+            }
+
+            href = href.split(spliter);
+            href = href[0] + spliter + href[1].split('?')[0];
+            href = href + new_social;
+
+            $this.attr('href', href);
+        });
     },
     getData: function(){
         var self = this;

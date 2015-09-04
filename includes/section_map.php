@@ -1,4 +1,3 @@
-
     <div class="container">
         <div class="row">
             <div class="col-sm-9">
@@ -15,7 +14,7 @@
                         <div class="title">2012 ED Visits</div>
                         <div class="social">
                             <?php
-                                $url = urlencode($rootUrl);
+                                $url = urlencode($rootUrl) . '?map=' . $map_hash;
                                 $text = urlencode('Asthma Emergency Department Visits in California');
                             ?>
                             <a href="http://facebook.com/sharer.php?t=<?php echo $text ?>&amp;u=<?php echo $url ?>"
