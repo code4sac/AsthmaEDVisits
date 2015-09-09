@@ -61,7 +61,7 @@ switch( $map_hash ){
 
 
 <section class="intro">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-2">
                 <h1><span>California</span> Asthma Emergency Department Visits</h1>

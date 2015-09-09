@@ -2,7 +2,7 @@
 <section class="resources">
 <a class="named_anchor" name="section_resources">&nbsp;</a>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <h2><span>Resources</span> Where Do I Go From Here?</h2>
@@ -36,7 +36,7 @@
 
 
 <footer>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="copyright">Asthma Emergency Department Visits</div>

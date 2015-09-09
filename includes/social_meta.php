@@ -13,7 +13,7 @@ $share = array(
     1 => array(
             'title' => 'Asthma Emergency Department Visits in CA',
             'description' => 'Asthma is one of the most common chronic diseases and a growing health concern in CA.',
-            'image' => 'share_0.png',
+            'image' => 'social_asthma_ed_visits.png',
         ),
     2 => array(
             'title' => 'How is Asthma Measured?',
@@ -73,7 +73,7 @@ $share = array(
         <meta name="twitter:site" content="@CAHealthData">
         <meta name="twitter:title" content="<?php echo $share[$slide]['title'] ?>">
         <meta name="twitter:description" content="<?php echo $share[$slide]['description'] ?>">
-        <meta name="twitter:image" content="http://chcf.idmstage.com/r3.2/img/social/<?php echo $share[$slide]['image'] ?>">
+        <meta name="twitter:image" content="http://chcf.idmstage.com/r3.2/img/social/<?php echo $share[$slide]['image'] ?>?2">
         <!-- Facebook Opengraph -->
         <meta property="og:site_name" content="California Health Care Foundation"/>
         <meta property="og:type" content="website"/>

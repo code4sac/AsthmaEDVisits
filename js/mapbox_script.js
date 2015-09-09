@@ -79,6 +79,9 @@ var MBox = {
         var map = L.mapbox.map('map', self.base_tile_type, {
                                 doubleClickZoom: false, // Disable default double-click behavior
                                 scrollWheelZoom: false,
+                                legendControl: {
+                                    position: 'topright'
+                                },
                             })
                             .setView([37.4, -118], 6)
                             .on('dblclick', function(e) {

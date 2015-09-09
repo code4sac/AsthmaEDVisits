@@ -24,7 +24,7 @@ function slide_social($index, $rootUrl){
 ?>
 
 
-<li class="slide start">
+<li class="slide start" data-id="start">
 
     <?php slide_social(1, $rootUrl) ?>
 
@@ -40,7 +40,7 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide measured">
+<li class="slide measured" data-id="measured">
 
     <?php slide_social(2, $rootUrl) ?>
 
@@ -64,7 +64,7 @@ function slide_social($index, $rootUrl){
 </li>
 
 
-<li class="slide common" data-name="how_common">
+<li class="slide common" data-id="how_common">
 
     <?php slide_social(3, $rootUrl) ?>
 
@@ -103,13 +103,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="adult_county">
+<li class="slide geography" data-id="adult_county">
 
     <?php slide_social(4, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>Adults</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>Adults</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -127,13 +127,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="youth_county">
+<li class="slide geography" data-id="youth_county">
 
     <?php slide_social(5, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>Youth Ages 0-17</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>Youth Ages 0-17</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -151,13 +151,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="youth_zip">
+<li class="slide geography" data-id="youth_zip">
 
     <?php slide_social(6, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>Youth by Zip</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>Youth by Zip</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -175,13 +175,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="imperial_valley">
+<li class="slide geography" data-id="imperial_valley">
 
     <?php slide_social(7, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>Imperial Valley</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>Imperial Valley</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -199,13 +199,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="los_angeles">
+<li class="slide geography" data-id="los_angeles">
 
     <?php slide_social(8, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>Los Angeles &amp; Inland Empire</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>Los Angeles &amp; Inland Empire</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -222,13 +222,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="central_valley">
+<li class="slide geography" data-id="central_valley">
 
     <?php slide_social(9, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>San Joaquin Valley</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>San Joaquin Valley</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -247,13 +247,13 @@ function slide_social($index, $rootUrl){
 
 
 
-<li class="slide geography" data-name="bay_area">
+<li class="slide geography" data-id="bay_area">
 
     <?php slide_social(10, $rootUrl) ?>
 
     <div class="row">
         <div class="col-sm-12">
-            <h3>Geography: <strong>San Francisco Bay</strong></h3>
+            <h3><span class="mobile_block">Geography:</span> <strong>San Francisco Bay</strong></h3>
         </div>
     </div>
     <div class="row">
@@ -271,28 +271,8 @@ function slide_social($index, $rootUrl){
 
 
 
-<!-- <li class="slide" data-name="median_income">
-    <div class="row">
-        <div class="col-sm-12">
-            <h3><strong>Asthma ED Visits</strong> per 10,000 by <br><strong>Median Household Income</strong> of ZIP Code</h3>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-5">
-            <div class="text">
-                <p>While data are not available on the income levels and environmental exposures of each individual asthma sufferer, ZIP codes with lower average incomes and higher environmental burdens also have higher rates of asthma ED visits, on average.</p>
-            </div>
-        </div>
-        <div class="col-sm-7">
 
-        </div>
-    </div>    
-</li> -->
-
-
-
-
-<li class="slide" data-name="races">
+<li class="slide races" data-id="races">
 
     <?php slide_social(11, $rootUrl) ?>
 
@@ -309,6 +289,7 @@ function slide_social($index, $rootUrl){
             </div>
         </div>
         <div class="col-sm-7">
+            <img src="img/race_chart.png" alt="ED Visit Rates by Race/Ethnicity" />
         </div>
     </div>    
 </li>

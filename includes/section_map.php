@@ -1,8 +1,8 @@
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-sm-9">
                 <h2><span>Interactive</span> Asthma Rates by Geography</h2>
-                <p>The map below shows 2012 Emergency Department visit rates for California counties and zip codes. Use the options on the side to toggle between age groups and map type. You can download the full data set, or select individual counties/zips to download.</p>
+                <p>The map below shows 2012 emergency department visit rates for California counties and zip codes. Use the options on the side to toggle between age groups and map type. You can download the full data set, or select individual counties/zips to download.</p>
             </div>
         </div>
 
@@ -11,7 +11,7 @@
 
                 <div class="map_wrap">
                     <div class="map_title">
-                        <div class="title">2012 ED Visits</div>
+                        <div class="title">2012 Emergency Department Visit Rates</div>
                         <div class="social">
                             <?php
                                 $url = urlencode($rootUrl) . '?map=' . $map_hash;
@@ -57,7 +57,7 @@
                         </div>
 
                         <a class="download btn btn-success btn-sm" href="#">
-                            <span class="glyphicon glyphicon-download"></span> Download Selected Data
+                            <span class="glyphicon glyphicon-download"></span> Download Selected <span class="mobilehide">Data</span>
                         </a>
                     </div>
                 </div><!-- .map_wrap -->
