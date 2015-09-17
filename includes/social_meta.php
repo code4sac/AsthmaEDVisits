@@ -73,77 +73,17 @@ $share = array(
         <meta name="twitter:site" content="@CAHealthData">
         <meta name="twitter:title" content="<?php echo $share[$slide]['title'] ?>">
         <meta name="twitter:description" content="<?php echo $share[$slide]['description'] ?>">
-        <meta name="twitter:image" content="http://chcf.idmstage.com/r3.2/img/social/<?php echo $share[$slide]['image'] ?>?2">
+        <meta name="twitter:image" content="http://www.idmlo.co/chcf/r3.4/img/social/<?php echo $share[$slide]['image'] ?>?2">
         <!-- Facebook Opengraph -->
         <meta property="og:site_name" content="California Health Care Foundation"/>
         <meta property="og:type" content="website"/>
         <meta property="og:title" content="<?php echo $share[$slide]['title'] ?>" />
-        <meta property="og:url" content="http://chcf.idmstage.com/r3.2?slide=<?php echo $slide ?>" />
+        <meta property="og:url" content="http://www.idmlo.co/chcf/r3.4?slide=<?php echo $slide ?>" />
         <meta property="og:description" content="<?php echo $share[$slide]['description'] ?>" />
-        <meta property="og:image" content="http://chcf.idmstage.com/r3.2/img/social/<?php echo $share[$slide]['image'] ?>">
+        <meta property="og:image" content="http://www.idmlo.co/chcf/r3.4/img/social/<?php echo $share[$slide]['image'] ?>">
 
 <?
 
-$fb_image = '<img style="position: absolute; left: -9999px;" src="http://chcf.idmstage.com/r3.2/img/social/' . $share[$slide]['image'] . '" />';
-
-/*
-
-switch ( $slide ) {
-    case 1: ?>
-        <!-- itter Card -->
-        <meta name="itter:card" content="summary_large_image">
-        <meta name="itter:site" content="@CAHealthData">
-        <meta name="itter:title" content="Slide 1">
-        <meta name="itter:description" content="Asthma is one of the most common chronic diseases and recognized as a growing public health concern.">
-        <meta name="itter:image" content="http://chcf.idmstage.com/images/share_1.png">
-        <!-- Facebook Opengraph -->
-        <meta property="og:site_name" content="Asthma Emergency Department Visits in California | CA Health Data"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="Asthma Emergency Department Visits 1" />
-        <meta property="og:url" content="http://chcf.idmstage.com/share_test.php?slide=1" />
-        <meta property="og:description" content="Asthma is one of the most common chronic diseases and recognized as a growing public health concern." />
-        <meta property="og:image" content="http://chcf.idmstage.com/images/share_1.png">
-
-        <?php
-        break;
-    
-    case 2: ?>
-        <!-- itter Card -->
-        <meta name="itter:card" content="summary_large_image">
-        <meta name="itter:site" content="@CAHealthData">
-        <meta name="itter:title" content="Slide 2">
-        <meta name="itter:description" content="Asthma is one of the most common chronic diseases and recognized as a growing public health concern.">
-        <meta name="itter:image" content="http://chcf.idmstage.com/images/share_2.png">
-        <!-- Facebook Opengraph -->
-        <meta property="og:site_name" content="Asthma Emergency Department Visits in California | CA Health Data"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="Asthma Emergency Department Visits 2" />
-        <meta property="og:url" content="http://chcf.idmstage.com/share_test.php?slide=2" />
-        <meta property="og:description" content="Asthma is one of the most common chronic diseases and recognized as a growing public health concern." />
-        <meta property="og:image" content="http://chcf.idmstage.com/images/share_2.png">
-
-        <?php
-        break;
-
-    default: ?>
-        <!-- itter Card -->
-        <meta name="itter:card" content="summary_large_image">
-        <meta name="itter:site" content="@CAHealthData">
-        <meta name="itter:title" content="Slide 0">
-        <meta name="itter:description" content="Asthma is one of the most common chronic diseases and recognized as a growing public health concern.">
-        <meta name="itter:image" content="http://chcf.idmstage.com/images/share_0.png">
-        <!-- Facebook Opengraph -->
-        <meta property="og:site_name" content="California Health Care Foundation"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:title" content="Asthma Emergency Department Visits 0" />
-        <meta property="og:url" content="http://chcf.idmstage.com/share_test.php" />
-        <meta property="og:description" content="Asthma is one of the most common chronic diseases and recognized as a growing public health concern." />
-        <meta property="og:image" content="http://chcf.idmstage.com/images/share_0.png">
-
-        <?php
-        break;
-}
-
-*/
+$fb_image = '<img style="position: absolute; left: -9999px;" src="http://www.idmlo.co/chcf/r3.4/img/social/' . $share[$slide]['image'] . '" />';
 
 ?>

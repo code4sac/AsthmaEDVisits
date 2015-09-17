@@ -396,6 +396,28 @@ section h2 span {
     margin: 6em 0 0;
 }
 
+.slide .footnote {
+    font-size: 1.2em;
+    margin-top: 1em;
+    color: #5b5b5b;
+}
+
+.slide .text a,
+.slide .footnote a {
+    color: #3DB8FF;
+    font-weight: 700;
+    border-bottom: 1px solid #3DB8FF;
+}
+.slide .text a:hover,
+.slide .text a:focus,
+.slide .footnote a:hover,
+.slide .footnote a:focus {
+    text-decoration: none;
+    color: #000;
+    border-bottom: 1px solid #000;
+}
+
+
 .slide_social {
     position: absolute;
     top: 1em;
@@ -487,8 +509,7 @@ section h2 span {
 /*--------------- .common ---------------*/
 
 .number_box {
-    background: #E6E6E6;
-    margin-top: 6em;
+    margin-top: 5.9em;
 }
 .number_box h3 {
     margin: 0;
@@ -496,7 +517,7 @@ section h2 span {
     font-size: 2.1em;
 }
 .number_box ul {
-    padding: 1.5em 1.7em;
+    padding: 0;
     margin: 0;
     list-style: none;
 }
@@ -504,14 +525,16 @@ section h2 span {
     margin-bottom: 1.4em;
 }
 .number_box .number_text {
-    font-size: 1.5em;
-    font-weight: 700;
+    font-size: 1.4em;
+    font-weight: 400;
+    line-height: 1.3em;
+    padding-bottom: 0.5em;
 }
 .number_box .number {
     font-weight: 700;
-    font-size: 5.3em;
+    font-size: 6em;
     line-height: 1em;
-    padding-bottom: 0.075em;
+    color: #3DB8FF;
 }
 .number_box .number span {
     font-size: 0.5em;

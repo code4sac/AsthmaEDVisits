@@ -139,7 +139,6 @@ switch( $map_hash ){
         map: '<?php echo $map_setting ?>'
     }
 
-
     jQuery(document).ready(function(){
         CHCF.dataMapInit();
     });

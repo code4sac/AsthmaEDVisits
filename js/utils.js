@@ -67,6 +67,10 @@ function make_csv_data(jsonData){
 
     var csv = '';
 
+    // Add data source name
+    csv = csv + 'Original Data Source: Emergency Department Database from the California Office of Statewide Health Planning and Development 2005-2012';
+    csv = csv + '\n';
+
     // Add Column names as first row
     for(var i = 0; i < csv_labels.length; i++){
 

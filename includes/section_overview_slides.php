@@ -59,6 +59,9 @@ function slide_social($index, $rootUrl){
         </div>
         <div class="col-sm-7">
             <img src="img/asthma_pyramid.gif" alt="Asthma indicator pyramid" />
+            <div class="footnote">
+                Asthma Surveillance Pyramid, developed by the Centers for Disease Control and Prevention, further described <a href="http://www.ehib.org/page.jsp?page_key=28#asthma_pyramid" target="_blank">here</a>.
+            </div>
         </div>
     </div>    
 </li>
@@ -76,7 +79,7 @@ function slide_social($index, $rootUrl){
     <div class="row">
         <div class="col-sm-5">
             <div class="text">
-                <p>In 2012, there were about <strong>185,831</strong> ED visits for asthma in California, or <strong>49.8 per 10,000</strong> Californians of all ages. The rate for youth aged 0-17 was much higher, with <strong>79.4</strong> ED visits per 10,000 young Californians.</p>
+                <p>In 2012, there were about <strong>186,000</strong> ED visits for asthma in California, or <strong>49.8 per 10,000</strong> Californians of all ages. The rate for youth aged 0-17 was much higher, with <strong>79.4</strong> ED visits per 10,000 young Californians.</p>
                 <p>The state’s Let’s Get Healthy California initiative has set a target of just <strong>28 youth ED visits</strong> for asthma per 10,000 by <strong>2022</strong>. Reaching this goal would represent an over <strong>65%</strong> cut in the youth ED visit rate over the next seven years.</p>
             </div>
         </div>
@@ -88,7 +91,7 @@ function slide_social($index, $rootUrl){
                         <div class="number_text">Total ED Visits</div>
                     </li>
                     <li>
-                        <div class="number">73.92</div>
+                        <div class="number">79.4</div>
                         <div class="number_text">Average Rate Per 10,000,<br>Age 0-17</div>
                     </li>
                     <li>
@@ -139,7 +142,7 @@ function slide_social($index, $rootUrl){
     <div class="row">
         <div class="col-sm-5">
             <div class="text">
-                <p>Youth asthma ED visit rates, on the other hand, are much higher statewide and show much more variation among areas. Counties with the lowest rates tend to be northern and rural. Highest rates are counties in the San Joaquin and Imperial valleys.</p>
+                <p>Youth asthma ED visit rates, on the other hand, are much higher statewide and show much more variation among areas. Counties with the lowest rates tend to be northern and rural. Counties with the highest rates are concentrated in the San Joaquin and Imperial valleys.</p>
             </div>
         </div>
         <div class="col-sm-6 col-sm-offset-1">
@@ -211,7 +214,7 @@ function slide_social($index, $rootUrl){
     <div class="row">
         <div class="col-sm-5">
             <div class="text">
-                <p>Youth asthma ED visits in the Los Angeles and Inland Empire areas show the most variation in rates among populations within the same air basin. Among the many potential causes of this variation are differences in indoor air quality and lower levels of adequate preventative care among some populations.</p>
+                <p>Youth asthma ED visits in the Los Angeles and Inland Empire areas show the great variation in rates among populations within the same air basin. Among the many potential causes of this variation are differences in indoor air quality and lower levels of adequate preventative care among some populations.</p>
             </div>
         </div>
         <div class="col-sm-6 col-sm-offset-1">
@@ -278,14 +281,14 @@ function slide_social($index, $rootUrl){
 
     <div class="row">
         <div class="col-sm-12">
-            <h3><strong>Blacks</strong> Have <strong>Highest</strong> Asthma ED Visit Rates</h3>
+            <h3><strong>African Americans</strong> Have the <strong>Highest</strong> Asthma ED Visit Rates</h3>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-5">
             <div class="text">
-                <p>From 2005–2010, asthma ED visit rates among <strong>Blacks</strong> were <strong>3–5 times higher</strong> than among Whites. Furthermore, Blacks are the only race/ethnicity group for which these rates have <strong>increased significantly over time</strong>.</p>
-                <p>Whites and Hispanics have similar asthma ED visit rates, while Asians/Pacific Islanders (A/PI) have slightly lower rates. (Hospitalization data do not allow for separating Pacific Islanders from Asians.) American Indians/Alaska Natives (AI/AN) have relatively low asthma ED visit rates, but research has shown that many AI/AN patients are misclassified as another race in hospital records, leading to underestimation of their true ED visit rates.</p>
+                <p>From 2005–2012, asthma ED visit rates among <strong>African Americans</strong> were <strong>3–5 times higher</strong> than among Caucasians. Furthermore, African Americans are the only race/ethnicity group for which these rates have increased <strong>significantly over time</strong>.</p>
+                <p>As the graph shows, this pattern holds for the youngest Californians, with African American youth ages 0-17 having much higher rates of asthma ED visits than youth of any other race or ethnicity.</p>
             </div>
         </div>
         <div class="col-sm-7">
