@@ -358,7 +358,7 @@ var Slides = {
             var newJsonData = {}
             for( var i = 0; i < geo_list.length; i++ ){
                 var id = geo_list[i];
-                if( jsonData[id] == null ){
+                if( jsonData[id] != null ){
                     newJsonData[id] = jsonData[id];
                 } else {
                     // console.log(id);
