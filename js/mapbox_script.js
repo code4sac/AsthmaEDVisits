@@ -7,7 +7,7 @@ var defaultStyle = {
     opacity: 1,
     color: 'white',
     fillOpacity: 0.8,
-    fillColor: red_colors[0] // color overrided in getStyle()
+    fillColor: colors[0] // color overrided in getStyle()
 }
 
 var hoverStyle = {
@@ -35,22 +35,21 @@ var emptyStyle = {
 ------------------------------------------------------------------------------*/
 
 var MBox = {
-    init: function(jsonDataCounty, jsonDataZip, minMaxCounty, minMaxZip){
+    init: function(jsonDataCounty, jsonDataZip, maxRate, hashValues){
         var self = this;
 
         // Set base tile map
         self.base_tile_type = 'mapbox.light';
 
         // Get settings from window hash if exist
-        var hash = self.getHash();
-        self.values = hash.values;
-        self.ages = hash.ages;
-        self.map = hash.map;
+        self.hashValues = hashValues;
+
+        // self.hashValues = self.getHash();
+        self.ages = self.hashValues.age;
+        self.map = self.hashValues.map;
 
         var $mapForm = jQuery('#mapForm');
-        $mapForm.find('select[name="values"]').val(self.values)
-                .end()
-                .find('select[name="ages"]').val(self.ages)
+        $mapForm.find('select[name="ages"]').val(self.ages)
                 .end()
                 .find('select[name="map"]').val(self.map);
         
@@ -58,37 +57,37 @@ var MBox = {
         self.jsonDataCounty = jsonDataCounty;
         self.jsonDataZip = jsonDataZip;
 
-        // Set data to use throughout
-        self.minMaxCounty = minMaxCounty;
-        self.minMaxZip = minMaxZip;
-
         // Get column name and max value
-        self.data_property = column_names[self.values][self.ages];
-        self.data_max = self.getMax();
-
-        // Build color intervals
-        self.intervals = self.buildColorIntervals();
+        self.data_property = column_names[self.ages];
+        self.data_max = maxRate;
+        self.interval_width = self.setIntervalWidth();
 
         // Fire it up!
-        self.onReady();
+        var maps = self.onReady();
+
+        return maps;
     },
     onReady: function(){
         var self = this;
 
         L.mapbox.accessToken = 'pk.eyJ1IjoibXJzaG9yZXMiLCJhIjoiZDQwYjc2ZjJlOTM1YTlhMjI4N2JlNDg2ODI0NTlkMTcifQ.rlAJW20fwjEB8H9ptH1bNA';
 
+
+        /* Create Maps
+        ----------------------------------------------------------------------*/
+
         var map = L.mapbox.map('map', self.base_tile_type, {
                                 doubleClickZoom: false, // Disable default double-click behavior
                                 scrollWheelZoom: false,
+                                legendControl: {
+                                    position: 'topright'
+                                },
                             })
                             .setView([37.4, -118], 6)
                             .on('dblclick', function(e) {
                                 // Zoom exactly to each double-clicked point
                                 map.setView(e.latlng, map.getZoom() + 1);
                             });
-
-        // MapBox interaction settings
-        // map.scrollWheelZoom.disable();
 
         jsonData = self.getData();
 
@@ -116,7 +115,6 @@ var MBox = {
         }
 
         drawLegendByDataValue();
-
 
         /* Draw shapes, legend, and add interactivity
         ----------------------------------------------------------------------*/
@@ -150,21 +148,14 @@ var MBox = {
         // Update if the age filter changes
         $mapForm.find('select[name="ages"]').on('change', function(event){
             self.ages = jQuery(this).val();
-            self.updateHash();
+            self.updateHashAndSocial();
             updateMapAndLegend();
         });
 
-        // Update if the age filter changes
-        $mapForm.find('select[name="values"]').on('change', function(event){
-            self.values = jQuery(this).val();
-            self.updateHash();
-            updateMapAndLegend();
-        });
-
-        // Update if the age filter changes
+        // Update if the map filter changes
         $mapForm.find('select[name="map"]').on('change', function(event){
             self.map = jQuery(this).val();
-            self.updateHash();
+            self.updateHashAndSocial();
             updateMapAndLegend();
             toggleLayers(self.map);
         });
@@ -200,10 +191,11 @@ var MBox = {
         });
 
         function updateMapAndLegend(){
-            // Update data_property and max
-            self.data_property = column_names[self.values][self.ages];
-            self.data_max = self.getMax();
-            self.intervals = self.buildColorIntervals();
+            // Update data_property
+            self.data_property = column_names[self.ages];
+            // self.intervals = self.buildColorIntervals();
+
+            jsonData = self.getData();
 
             if( self.map == 'county' ){
                 drawShapesByDataValue(countyLayer, 'county');
@@ -258,24 +250,19 @@ var MBox = {
         // get color depending on asthma value
         function getColor(d) {
 
-            var intervals = self.intervals;
-            var range = [0, intervals.length];
-            var mid;
+            // Correct for null values
+            if( d == "" || d == null ){ return grayColor; }
 
-            d = d == null ? 0 : d; // remove null values
+            // Divide by interval_width for id of color bin
+            d = Math.floor( d / self.interval_width );
 
-            for( var i = 0; i < intervals.length; i++ ){
-                if( intervals[i].start <= d && d <= intervals[i].end + 1){
-                    return intervals[i].color;
-                } else {
-                    // color large values
-                    if( intervals[intervals.length - 1].start <= d ){
-                        return intervals[intervals.length - 1].color;
-                    }
-                }
+            if( d < 8 ){
+                return colors[d];
+            } else {
+                // All numbers beyond the last bin go in the last bin
+                return colors[colors.length - 1]; // last color
             }
         }
-
 
         /* Map legend
         ------------------------------------------------------------*/
@@ -284,33 +271,31 @@ var MBox = {
             // use self.intervals with colors to build map legend
 
             // Set top text
-            if( self.values == 'number' ){
-                var text = '<span>Number of ED Visits</span><ul>';
-            } else {
-                var text = '<span>Rate per 10,000</span><ul>';
-            }
+            var text = '<span>Rate per 10,000</span><ul>';
 
             var labels = [];
 
-            var color,
-                from,
-                to;
+            var width = self.interval_width,
+                from = 0,
+                to = width;
 
-            for( var i = 0; i < self.intervals.length; i++ ){
-                from = self.intervals[i].start;
-                to = self.intervals[i].end;
-                color = self.intervals[i].color;
+            for( var i = 0; i < 8; i++ ){
 
-                if( i < self.intervals.length - 1 ){
-                    to = '&ndash;' + to;
+                if( i < 8 - 1 ){
+                    labels.push(
+                        '<li><span class="swatch" style="background:' + colors[i] + '"></span> ' +
+                        from + '&ndash;' + to + '</li>'
+                    );
                 } else {
-                    to = '+';
+                    labels.push(
+                        '<li><span class="swatch" style="background:' + colors[i] + '"></span> ' +
+                        from + '+</li>'
+                    );
                 }
 
-                labels.push(
-                    '<li><span class="swatch" style="background:' + color + '"></span> ' +
-                    from + to + '</li>'
-                );
+
+                from += width;
+                to += width;
             }
 
             return text + labels.join('') + '</ul>';
@@ -390,16 +375,6 @@ var MBox = {
                 var value = null;
             }
 
-            if( value == null ){
-                value = '0';
-            }
-
-            if( self.values == 'rate' ){
-                unit_text = 'rate per 10,000';
-            } else {
-                unit_text = 'total ED visits';
-            }
-
             if( self.map == 'county' ){
                 var geo_type = 'County';
                 var title = layer.feature.properties.title;
@@ -408,9 +383,16 @@ var MBox = {
                 var title = name;
             }
 
+            var text = '<div class="marker-title">' + title + ' ' + geo_type + '</div>';
+
+            if( value == "" || value == null ){
+                text += '<em>Rate not calculable</em>';
+            } else {
+                text += '<strong>' + value + '</strong> rate per 10,000';
+            }
+
             popup.setLatLng(e.latlng);
-            popup.setContent('<div class="marker-title">' + title + ' ' + geo_type + '</div>' +
-                '<strong>' + value + '</strong> ' + unit_text);
+            popup.setContent(text);
 
             // If not an emplty zip, show popup and hover style
             if( !layer.feature.properties.emptyStyle ){
@@ -448,64 +430,46 @@ var MBox = {
                 map.setView(e.latlng, map.getZoom() + 1);
             }
         }
-
-        /* Fitler features
-        ------------------------------------------------------------*/
-
-        function filterFeatures(){
-            console.log('filterFeatures');
-        }
-
-
-        /* Search Filter
-        ------------------------------------------------------------*/
-
-        // Initialize the geocoder control and add it to the map.
-        var geocoderControl = L.mapbox.geocoderControl('mapbox.places', {
-            autocomplete: true
-        });
-        geocoderControl.addTo(map);
-
-        // Listen for the `found` result and display the first result
-        // in the output container. For all available events, see
-        // https://www.mapbox.com/mapbox.js/api/v2.2.1/l-mapbox-geocodercontrol/#section-geocodercontrol-on
-        geocoderControl.on('found', function(res){
-            // output.innerHTML = JSON.stringify(res.results.features[0]);
-        }).on('select', function(res){
-            console.log(res);
-        });
-
-
-        /* Add Attribution
-        ------------------------------------------------------------*/
-
-        map.attributionControl.addAttribution('Data from ' +
-            '<a href="#">CHCF</a>');
     },
     getHash: function(){
-        var raw = window.location.hash;
-        var hashValues = {
-            values: 'rate',
-            ages: '0',
-            map: 'county'
-        }
-
-        raw = raw.replace('#', '');
-        raw = raw.split('&');
-
-        for( var i = 0; i < raw.length; i++ ){
-            var split = raw[i].split('='); // values=number --> ['values', 'number']
-            hashValues[split[0]] = split[1]; // hasValues['values'] = 'number'
-        }
-        return hashValues;
-    },
-    updateHash: function(){
         var self = this;
-        var new_hash = '#values=' + self.values + '&ages=' + self.ages + '&map=' + self.map;
+
+        var raw = window.location.hash;
+        if( raw.length ){
+            raw = raw.replace('#', '');
+            raw = raw.split('&');
+            for( var i = 0; i < raw.length; i++ ){
+                var split = raw[i].split('='); // values=number --> ['values', 'number']
+                self.hashValues[split[0]] = split[1]; // hasValues['values'] = 'number'
+            }
+        }
+        // No return statement, sets hashValues in `for` loop above
+    },
+    updateHashAndSocial: function(){
+        var self = this;
+
+        var new_social = '?map=' + self.map + self.ages;
+
         // Update has without scrolling the window
-        var scrollmem = jQuery(window).scrollTop();
-        window.location.hash = new_hash;
-        jQuery(window).scrollTop(scrollmem);
+        window.history.replaceState('state_map', 'Asthma ED Visits', new_social);
+
+        // Update map social links
+        jQuery('.map_wrap .social a').each(function(){
+            $this = jQuery(this);
+            var href = $this.attr('href');
+
+            if( $this.hasClass('st-icon-twitter') ){
+                var spliter = 'url='; // twitter intent url parameter
+            } else {
+                var spliter = 'u='; // facebook url parameter
+            }
+
+            href = href.split(spliter);
+            href = href[0] + spliter + href[1].split('?')[0];
+            href = href + new_social;
+
+            $this.attr('href', href);
+        });
     },
     getData: function(){
         var self = this;
@@ -515,76 +479,11 @@ var MBox = {
             return self.jsonDataZip;
         } 
     },
-    getMax: function(){
-        var self = this;
-        // Set min/max data by map type
-        if( self.map == 'county' ){
-            var max_data = self.minMaxCounty;
-        } else {
-            var max_data = self.minMaxZip;
-        }
-        // Get min/max for values type
-        if( self.values == 'number' ){
-            // `number` has max/min for each group [all] and [0-17, 18+]
-            return max_data[self.values][self.ages]['max'];
-        } else {
-            // `rate` has max/min for 1 group [all, 0-17, 18+]
-            return max_data[self.values]['max'];
-        }
-    },
-    buildColorIntervals: function(){
+    setIntervalWidth: function(){
         var self = this;
 
-        var min = 0,
-            max = self.data_max,
-            split_at = 28,
-            values = self.values,
-            ages = self.ages;
+        var width = Math.ceil(self.data_max / 8);
 
-        var intervals = [];
-
-        if( values == 'rate' && ages == 0 ){
-            // Build intervals for 2022 target
-            intervals = self.makeIntervals(min, split_at, 2);
-            intervals_2 = self.makeIntervals(split_at + 1, max, 8);
-            intervals.push.apply(intervals, intervals_2);
-            // Add colors from utils.js for 2022 (includes greens)
-            intervals = self.addColorsToIntervals(intervals, colors2022);
-        } else {
-            // Build intervals for everyone else
-            intervals = self.makeIntervals(0, max, 8);
-            // Add colors from utils.js for regular reds
-            intervals = self.addColorsToIntervals(intervals, colors);
-        }
-
-        return intervals;
+        return width;
     },
-    makeIntervals: function(min, max, number){
-
-        // Get range of each interval between `min` and `max`
-        var width = (max - min) / number;
-        var intervals = [];
-
-        // Build intervals, a list of {start: ?, end: ?} objects
-        for( var i = 0; i < number; i++){
-            var start_val = Math.ceil(min + (width * i));
-            intervals[i] = {'start': start_val};
-
-            // Add ending values to previous item
-            if( 0 < i && i < number ){
-                intervals[i-1]['end'] = start_val - 1;
-            }
-            // Make last ending the `max`
-            if( i == number - 1 ){
-                intervals[i]['end'] = max;
-            }
-        }
-        return intervals;
-    },
-    addColorsToIntervals: function(intervals, colors){
-        for( var i = 0; i < intervals.length; i++){
-            intervals[i]['color'] = colors[i];
-        }
-        return intervals;
-    }
 } // end var MBox
