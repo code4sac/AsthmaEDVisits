@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="slide_count">
-                    <span class="current">1</span> of <span class="max">11</span>
+                    <span class="current">1</span> of <span class="max">12</span>
                 </div>
 
                 <div class="histogram"></div>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="slide_count mobile_top">
-                    <span class="current">1</span> of <span class="max">11</span>
+                    <span class="current">1</span> of <span class="max">12</span>
                 </div>
 
             </div>

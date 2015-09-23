@@ -1,6 +1,6 @@
 <?php
 $rootUrl = 'http://localhost/chcf/';
-// $rootUrl = 'http://chcf.idmstage.com/r3.2/';
+// $rootUrl = 'http://idmlo.co/chcf/r3.2/';
 
 /* Set `$slide` for social share and jump to slide
 ------------------------------------------------------------------------------*/
@@ -8,6 +8,9 @@ $rootUrl = 'http://localhost/chcf/';
 
 if( isset($_GET['slide']) ){
     $slide = $_GET['slide'];
+    if( $slide < 1 || $slide >= 12 ){ // 12th slide is the "what's next" and should = 0
+        $slide = 0;
+    }
 } else {
     $slide = 0;
 }
@@ -81,6 +84,7 @@ switch( $map_hash ){
             <div class="col-sm-10">
                 <p class="lead">Asthma is one of the most common chronic diseases and recognized as a growing public health concern.</p>
                 <p>The effects of asthma include missed school and work days, disruption of sleep and daily activities, urgent medical visits for asthma exacerbations, and even death. Asthma affects not only those with the disease but also their family members and friends, as well as schools and businesses. There is no cure for asthma, but symptoms can be controlled with access to medical care, appropriate medications, proper self-management, and trigger reduction. When asthma is controlled, people can lead normal lives and achieve their goals.</p>
+                <p>This project site provides an <a href="#section_overview">overview of key insights</a> related to asthma emergency department visits from the CHHS Open Data Portal and other sources. It also provides an <a href="#section_map">interactive map</a> tool to help understand how asthma ED visit rates vary across the state.</p>
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@ var Slides = {
         self.current = 0;
         self.next = self.current + 1;
         self.prev = self.current - 1;
-        self.max_slides = 11;
+        self.max_slides = 12;
 
         // Initialize controls
         self.initControls();
@@ -395,13 +395,13 @@ var Slides = {
         }
 
         for( var j = 0; j < values.length; j++ ){
-            var val = values[j][1] || 0;
-
-            var idx = Math.floor(val / interval);
-
-            // Handle zips having a higher range
-            if( idx >= num_bins ){ idx = num_bins - 1; }
-            bins[idx]['count'] += 1;
+            var val = values[j][1];
+            if( val != null && val != '' ){
+                var idx = Math.floor(val / interval);
+                // Handle zips having a higher range
+                if( idx >= num_bins ){ idx = num_bins - 1; }
+                bins[idx]['count'] += 1;                
+            }
         }
         return bins;
     },
@@ -472,7 +472,11 @@ var Slides = {
             8: geography_san_joaquin,
             9: geography_bay_area,
             10: race_demographics,
+            11: function(){},
         }
+
+        console.log(updaters[self.current]);
+        console.log(self.current);
 
         // Call update function for slide number
         updaters[self.current]();

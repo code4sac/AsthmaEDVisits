@@ -182,6 +182,18 @@ section h2 span {
     color: #000;
 }
 
+.intro a {
+    color: #FFF;
+    border-bottom: 1px solid #FFF;
+}
+.intro a:hover,
+.intro a:focus {
+    color: #000;
+    border-bottom: 1px solid #000;
+    text-decoration: none;
+}
+
+
 .quick_links {
     margin-top: 1.2em;
 }
@@ -569,6 +581,23 @@ section h2 span {
     }
 }
 
+/*--------------- .end.start ---------------*/
+
+.slide.end .continue {
+    position: relative;
+    margin: 4em auto 0;
+    width: 12em;
+    text-align: center;
+}
+.slide.end .continue span {
+    position: absolute;
+    font-size: 3em;
+    left: 50%;
+    margin-left: -0.5em;
+    top: 0.6em;
+}
+
+
 /*------------------------------------------------------------------------------
     :: Map
 ------------------------------------------------------------------------------*/
@@ -850,6 +879,16 @@ section h2 span {
     border-bottom: 1px solid transparent;
 }
 
+.resources hr {
+    border-top: 1px solid #888;
+    margin: 1em 0;
+    padding: 1em 0;
+}
+
+.resources .data_sources_note {
+    font-size: 0.8em;
+}
+
 @media screen and (max-width: 767px){
     .resources h3 {
         border-bottom: 1px solid #404040;
@@ -861,23 +900,29 @@ section h2 span {
     }
 }
 
-
 /*------------------------------------------------------------------------------
     :: Footer
 ------------------------------------------------------------------------------*/
 
 footer {
     background: #000;
-    border-top: 3px solid #666666;
     padding: 1.8em 0;
+    border-top: 3px solid #555555;
 }
 footer .copyright {
-    font-size: 1.2em;
+    font-size: 1.5em;
     line-height: 1em;
     font-weight: 400;
     letter-spacing: 1px;
     color: #999;
     text-transform: uppercase;
+    padding-bottom: 1em;
+}
+
+footer .text {
+    color: #bbb;
+    font-size: 1.3em;
+    line-height: 1.4em;
 }
 
 @media screen and (max-width: 767px){

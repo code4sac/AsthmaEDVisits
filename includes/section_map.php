@@ -1,7 +1,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-9">
-                <h2><span>Interactive</span> Asthma Rates by Geography</h2>
+                <h2><span>Interactive</span> Asthma Emergency Department Visit Rates by Geography</h2>
                 <p>The map below shows 2012 emergency department visit rates for California counties and zip codes. Use the options on the side to toggle between age groups and map type. You can download the full data set, or select individual counties/zips to download.</p>
             </div>
         </div>

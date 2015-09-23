@@ -296,3 +296,14 @@ function slide_social($index, $rootUrl){
         </div>
     </div>    
 </li>
+
+
+
+
+<li class="slide start end" data-id="after">
+    <div class="col-sm-10 col-sm-offset-1">
+        <h3>Where To Go Next</h3>
+        <p><strong>Scroll down</strong> to use the <strong>interactive map tool</strong> to learn how asthma ED visit rates vary across the state. You can view the data by <strong>county</strong> or <strong>zip</strong>, and by <strong>age</strong> range.</p>
+        <a href="#section_map" class="continue">GO TO MAP <span class="glyphicon glyphicon-chevron-down"></span></a>
+    </div>    
+</li>

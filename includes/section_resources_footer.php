@@ -29,17 +29,34 @@
                 <p>Need other asthma data? Check out <a href="http://ask.chis.ucla.edu/" target="_blank">AskCHIS</a>, <a href="http://www.cdc.gov/brfss/" target="_blank">BRFSS</a>, the <a href="http://www.cdc.gov/asthma/asthmadata.htm" target="_blank">CDC</a>, <a href="http://californiabreathing.org" target="_blank">California Breathing</a>, and the <a href="http://www.ehib.org/page.jsp?page_key=24" target="_blank">California Environmental Health Tracking Program</a>.<p>
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="data_sources_note">
+                    <p>Original Data Source: Emergency Department Database from the California Office of Statewide Health Planning and Development 2005-2012</p>
+                    <p>Rates were obtained from the Environmental Health Investigations Branch of CDPH</p>
+                </div>
+            </div>
+        </div>
     </div>
 
 </section>
 <!-- .section_context -->
-
 
 <footer>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="copyright">Asthma Emergency Department Visits</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="text">A product of the California Health Data Project, a statewide effort funded by the California HealthCare Foundation’s Free the Data initiative in partnership with CHHS.</div>
             </div>
         </div>
     </div>

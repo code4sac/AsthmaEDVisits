@@ -70,6 +70,8 @@ function make_csv_data(jsonData){
     // Add data source name
     csv = csv + 'Original Data Source: Emergency Department Database from the California Office of Statewide Health Planning and Development 2005-2012';
     csv = csv + '\n';
+    csv = csv + 'Rates were obtained from the Environmental Health Investigations Branch of CDPH'
+    csv = csv + '\n';
 
     // Add Column names as first row
     for(var i = 0; i < csv_labels.length; i++){

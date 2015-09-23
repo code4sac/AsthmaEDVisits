@@ -73,17 +73,17 @@ $share = array(
         <meta name="twitter:site" content="@CAHealthData">
         <meta name="twitter:title" content="<?php echo $share[$slide]['title'] ?>">
         <meta name="twitter:description" content="<?php echo $share[$slide]['description'] ?>">
-        <meta name="twitter:image" content="http://www.idmlo.co/chcf/r3.4/img/social/<?php echo $share[$slide]['image'] ?>?2">
+        <meta name="twitter:image" content="<?php echo $rootUrl; ?>img/social/<?php echo $share[$slide]['image'] ?>?2">
         <!-- Facebook Opengraph -->
         <meta property="og:site_name" content="California Health Care Foundation"/>
         <meta property="og:type" content="website"/>
         <meta property="og:title" content="<?php echo $share[$slide]['title'] ?>" />
-        <meta property="og:url" content="http://www.idmlo.co/chcf/r3.4?slide=<?php echo $slide ?>" />
+        <meta property="og:url" content="<?php echo $rootUrl; ?>?slide=<?php echo $slide ?>" />
         <meta property="og:description" content="<?php echo $share[$slide]['description'] ?>" />
-        <meta property="og:image" content="http://www.idmlo.co/chcf/r3.4/img/social/<?php echo $share[$slide]['image'] ?>">
+        <meta property="og:image" content="<?php echo $rootUrl; ?>img/social/<?php echo $share[$slide]['image'] ?>">
 
 <?
 
-$fb_image = '<img style="position: absolute; left: -9999px;" src="http://www.idmlo.co/chcf/r3.4/img/social/' . $share[$slide]['image'] . '" />';
+$fb_image = '<img style="position: absolute; left: -9999px;" src="' . $rootUrl . 'img/social/' . $share[$slide]['image'] . '" />';
 
 ?>
