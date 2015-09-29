@@ -83,8 +83,9 @@ switch( $map_hash ){
             </div>
             <div class="col-sm-10">
                 <p class="lead">Asthma is one of the most common chronic diseases and recognized as a growing public health concern.</p>
-                <p>The effects of asthma include missed school and work days, disruption of sleep and daily activities, urgent medical visits for asthma exacerbations, and even death. Asthma affects not only those with the disease but also their family members and friends, as well as schools and businesses. There is no cure for asthma, but symptoms can be controlled with access to medical care, appropriate medications, proper self-management, and trigger reduction. When asthma is controlled, people can lead normal lives and achieve their goals.</p>
-                <p>This project site provides an <a href="#section_overview">overview of key insights</a> related to asthma emergency department visits from the CHHS Open Data Portal and other sources. It also provides an <a href="#section_map">interactive map</a> tool to help understand how asthma ED visit rates vary across the state.</p>
+                <p>Emergency Department (ED) visit rates related to asthma are a leading indicator healthcare leaders use to track the effects of asthma, particularly on children 0-17 years old.</p> 
+
+                <p>This project site provides an <a href="#section_overview">overview of key insights</a> contained within asthma ED visit rate datasets on the CHHS Open Data Portal and other sources. It also provides an <a href="#section_map">interactive map tool</a> to help visualize how asthma ED visit rates vary across the state.</p>
             </div>
         </div>
     </div>
