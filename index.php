@@ -1,6 +1,6 @@
 <?php
-$rootUrl = 'http://localhost/chcf/';
-// $rootUrl = 'http://idmlo.co/chcf/r3.2/';
+// $rootUrl = 'localhost/chscf/';
+$rootUrl = 'http://www.asthmastoryca.org/';
 
 /* Set `$slide` for social share and jump to slide
 ------------------------------------------------------------------------------*/
