@@ -62,13 +62,20 @@ p {
     border-bottom: 5px solid #595959;
 }
 .navbar .navbar-brand {
-    color: white;
-    font-size: 1.8em;
-    font-weight: 700;
-    letter-spacing: 0.125em;
-    text-transform: uppercase;
     padding: 1.1em 0;
     height: auto;
+}
+.navbar .navbar-brand img {
+    float: left;
+    width: 75px;
+}
+.navbar .navbar-brand span {
+    color: white;
+    margin: 22px 0 0 95px;
+    display: block;
+    font-size: 1.3em;
+    font-weight: 300;
+    line-height: 1.2em;
 }
 
 .navbar .download {
@@ -79,7 +86,7 @@ p {
     font-size: 1.4em;
     font-weight: 700;
     color: #E6E6E6;
-    padding: 1.3em 0;
+    padding: 3.3em 0 0;
     display: block;
 }
 .navbar .download a .glyphicon {
@@ -96,7 +103,7 @@ p {
 
 .navbar .social {
     float: right;
-    padding: 1em 0 0 2.2em;
+    padding: 3.3em 0 0 2.2em;
     font-size: 1.2em;
     word-spacing: 0.4em;
 }
@@ -107,17 +114,23 @@ p {
 
 @media screen and (max-width: 767px){
     .navbar .navbar-brand {
-        padding: 1.1em 0 1.1em 1.3em;
-        width: 74%;
+        padding: 1.1em 0 1.1em 0.9em;
         float: left;
     }
+    .navbar .navbar-brand img {
+        width: 53px;
+    }
+    .navbar .navbar-brand span {
+        margin: -1px 0 0 68px;
+    }
+
     .navbar .download {
         position: absolute;
         left: -9999px;
     }
     .navbar .social {
         position: absolute;
-        top: 0.6em;
+        top: 2.5em;
         right: 13px;
         font-size: 1.5em;
         word-spacing: .2em;

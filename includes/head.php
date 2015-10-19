@@ -27,7 +27,10 @@
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Asthma Emergency Department Visits</a>
+            <a class="navbar-brand" href="http://www.californiabreathing.org/">
+                <img src="img/calbreathing_logo.png" />
+                <span>Asthma Emergency Department Visits</span>
+            </a>
         </div>
 
         <div class="social">
