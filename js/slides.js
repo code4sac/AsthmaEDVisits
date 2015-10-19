@@ -13,7 +13,7 @@ function slideShow(jsonDataCounty, jsonDataZip, maxRate, GET_slide){
             // Change color of arrows for first slide and last slide
             var data_id = $slideElement.attr('data-id');
             switch( data_id ){
-                case 'races':
+                case 'after':
                     jQuery('.slide_wrap').addClass('disable_right');
                     break;
                 case 'start':
