@@ -17,6 +17,15 @@ There is PHP variable `$rootURL` at the top of `index.php` that should be set to
 * Leaflet Omnivore - CDN - Mapbox plugin to read/convert topoJSON
 * D3.js - local - Used for histogram in slides
 
+## Data
+
+Data values for the map and the histogram are stored as javascript object in `/data/` folder.
+
+- County data: `/data/emergency_department_rates__county.js`
+- Zip Code data: `/data/emergency_department_rates__zip.js`
+
+NOTE: The `/data/` folder also includes `.json` data equivalents for future use if needed, but they are not used in the site currently. 
+
 ## Slide Section
 
 The slider is powered by BxSlider, a jQuery plugin for responsive slide shows.
@@ -32,6 +41,8 @@ The histogram markup is not included within the slides, but is an HTML container
 New slide markup can be added to `includes/section_overview_slides.php`.
 
 To initialize a slide, an update method must be added to to the function array within **updateSlides()** in `slides.js`. The key value of the array should be the 0-indexed equivalent of the slide's number. The indexes of other functions in **updateSlides()** will need to be adjust if inserting a slide in between already existing slides.
+
+IF the new slide replaces the last slide, a change will have to be made to the function `slideShow()` in `/js/slides.js`. This function contains a javascript `switch()` that tests the `data-id` attribute of the slide and updates the color of the left/right arrows by adding/removing CSS classes.
 
 ## MapBox
 

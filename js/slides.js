@@ -13,13 +13,16 @@ function slideShow(jsonDataCounty, jsonDataZip, maxRate, GET_slide){
             // Change color of arrows for first slide and last slide
             var data_id = $slideElement.attr('data-id');
             switch( data_id ){
-                case 'after':
-                    jQuery('.slide_wrap').addClass('disable_right');
-                    break;
                 case 'start':
+                    // Disble -- make gray -- the left arrow
                     jQuery('.slide_wrap').addClass('disable_left');
                     break;
+                case 'after':
+                    // Disble -- make gray -- the right arrow
+                    jQuery('.slide_wrap').addClass('disable_right');
+                    break;
                 default:
+                    // Enable both the right and left arrows
                     jQuery('.slide_wrap').removeClass('disable_left disable_right');
             }
         },

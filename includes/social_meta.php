@@ -61,9 +61,9 @@ $share = array(
             'image' => 'social_bay_area.png',
         ),
     11 => array(
-            'title' => 'Blacks Have Highest Asthma ED Visit Rates in CA',
-            'description' => 'From 2005–2010, asthma ED visit rates among Blacks were 3–5 times higher than Whites.',
-            'image' => 'social_races.png',
+            'title' => 'African Americans Have Highest Asthma ED Visit Rates in CA',
+            'description' => 'From 2005–2012, asthma ED visit rates among African Americans were 3–5 times higher than Whites.',
+            'image' => 'social_race_ethnicity.png',
         ),
 );
 
